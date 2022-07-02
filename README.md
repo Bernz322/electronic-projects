@@ -7,9 +7,9 @@
 
 <h3>Arduino</h3>
 
-| Name                                   | Go to                                                                  |
-| -------------------------------------- | ---------------------------------------------------------------------- |
-| 3 LEDs Multiple Pattern w/ Push Button | [Project](Arduino/3_LEDs_with_Push_Button__Multiple_Pattern/README.md) |
+| Name                                   | Go to                                                         |
+| -------------------------------------- | ------------------------------------------------------------- |
+| 3 LEDs Multiple Pattern w/ Push Button | [Project](Arduino/3_LEDs_with_Push_Button__Multiple_Pattern/) |
 
 <h3>ESP8266 (NodeMCU)</h3>
 
