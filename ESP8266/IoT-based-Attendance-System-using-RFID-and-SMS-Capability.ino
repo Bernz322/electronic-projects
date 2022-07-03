@@ -1,12 +1,16 @@
+/* Copyright (c) 2022 Jeffrey G. Bernadas. All rights reserved.*/
+
 /* Library for RFID */
 #include <MFRC522.h>
 #include <SPI.h>
+
 /* Library for REST API (Get/ Post) */
 #include <ArduinoJson.h>  // To convert received data to JSON format
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266HTTPClient.h>
+
 /* Library for 1.3 OLED */
 #include <Wire.h>
 #include<SH1106.h>
@@ -28,7 +32,7 @@ constexpr uint8_t SS_PIN = D3;
 
 SoftwareSerial SIM900A(15, 2);
 
-/* Instance of the class for the RFID */
+/* Instance of the class for RFID */
 MFRC522 rfid(SS_PIN, RST_PIN);
 MFRC522::MIFARE_Key key;
 
@@ -36,17 +40,17 @@ MFRC522::MIFARE_Key key;
 SH1106 display(0x3C,D1,D2);
 
 /* WIFI Credentials */
-const char *ssid = "Trojan 24g";
-const char *password = "hyper!Terminal2.4g";
+const char *ssid = "Insert SSID";
+const char *password = "Insert Password";
 WiFiClient wifiClient;
 
-/* API Route */
-const char *host = "http://snnhs-attendance-system.herokuapp.com/api";  // NODEJS REST API Host
+/* RESTAPI Route */
+const char *host = "http://your-rest-api.com/api";
 
 String tag; // Init var for RFID tag
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(9600); // For debugging purposes
   SIM900A.begin(9600); 
   Serial.println("SIM900A started at 9600");
   delay(1000);
@@ -58,7 +62,7 @@ void setup() {
   /* End of RFID config */
 
   /* Start of WIFI config */
-  WiFi.mode(WIFI_OFF);  // Prevents reconnection during reuploading of code
+  WiFi.mode(WIFI_OFF);  // Prevents disconnect/ reconnect during reuploading of code
   delay(1000);
   WiFi.mode(WIFI_STA);
 
@@ -143,7 +147,7 @@ void loop() {
       delay(1500);
 
       // Create attendance in the db
-      http.begin(wifiClient, host + String("/attendance"));
+      http.begin(wifiClient, host + String("/attendance")); 
       String attendanceData = "rfid=" + tag;
       http.addHeader("Content-Type", "application/x-www-form-urlencoded");
       int httpCode = http.POST(attendanceData); // attendanceData is the RFID tag

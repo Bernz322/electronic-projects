@@ -1,5 +1,5 @@
 <h1 align="center">Automated Customer Counter - School Project</h1>
-<p align="center">
+<p align="justify">
  A project I developed to pass one of my college subject. It is an <b>Automated Customer Counter</b> which uses an <b> Ultrasonic Sensor</b> to determine if a customer enters an establishment. It is developed to combat overcrowding and decrease population density during the height of Covid-19 Pandemic.
 </p>
 
