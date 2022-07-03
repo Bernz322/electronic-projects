@@ -3,28 +3,30 @@
  All my personal projects with Arduino, ESP8266, Raspberry Pi (Thesis), and Embedded Projects (OJT) using an AT89C2051
 </p>
 
-## ⚒️ Contents:
+## 📃 Content:
 
 <h3>Arduino</h3>
 
-| Name                                   | Go to                                                         |
-| -------------------------------------- | ------------------------------------------------------------- |
-| 3 LEDs Multiple Pattern w/ Push Button | [Project](Arduino/3_LEDs_with_Push_Button__Multiple_Pattern/) |
+| Name                                          | Go to                                                                 |
+| --------------------------------------------- | --------------------------------------------------------------------- |
+| 3 LEDs Multiple Pattern w/ Push Button        | [Project](Arduino/3_LEDs_with_Push_Button__Multiple_Pattern/)         |
+| Automated Customer Counter Project            | [Project](Arduino/Automated_Customer_Counter/)                        |
+| Autonomous Two Wheeled Car Robot              | [Project](Arduino/Autonomous_2_Wheeled_Robot/)                        |
+| Bluetooth Controlled Two Wheeled Car          | [Project](Arduino/Bluetooth_Controlled_Car__2_wheels__L298N_Driver_/) |
+| MQ2 Smoke Sensor with LCD, LED, and Buzzer    | [Project](Arduino/MQ2_with_I2C_Display/)                              |
+| Ultrasonic Sensor with Servo, LED, and Buzzer | [Project](Arduino/Ultrasonic_with_Servo_and_LED/)                     |
 
 <h3>ESP8266 (NodeMCU)</h3>
 
-| Name                                     | Go to                                                          |
-| ---------------------------------------- | -------------------------------------------------------------- |
-| Multiple Pattern w/ 3 LEDs & Push Button | [Project](3_LEDs_with_Push_Button__Multiple_Pattern/README.md) |
+| Name | Go to |
+| ---- | ----- |
 
 <h3>Raspberry Pi</h3>
 
-| Name                                     | Go to                                                          |
-| ---------------------------------------- | -------------------------------------------------------------- |
-| Multiple Pattern w/ 3 LEDs & Push Button | [Project](3_LEDs_with_Push_Button__Multiple_Pattern/README.md) |
+| Name | Go to |
+| ---- | ----- |
 
 <h3>OJT</h3>
 
-| Name                                     | Go to                                                          |
-| ---------------------------------------- | -------------------------------------------------------------- |
-| Multiple Pattern w/ 3 LEDs & Push Button | [Project](3_LEDs_with_Push_Button__Multiple_Pattern/README.md) |
+| Name | Go to |
+| ---- | ----- |
