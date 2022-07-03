@@ -1,0 +1,1397 @@
+RC51 COMPILER V03.03.42,  MAINCODE1               08/05/21  13:32:27  PAGE  1
+
+QCW(0x00002F32)
+
+WIN32 RC51 COMPILER V03.03.42, COMPILATION OF MODULE MAINCODE1 
+OBJECT MODULE PLACED IN c:\users\berna\documents\ssct 2020 - 2021\ojt\requiremen
+            -ts\ojt requirements 2\c language code\maincode1.obj
+COMPILER INVOKED BY: RC51.EXE C:\USERS\BERNA\DOCUMENTS\SSCT 2020 - 2021\OJT\REQU
+            -IREMENTS\OJT REQUIREMENTS 2\C LANGUAGE CODE\MAINCODE1.C OBJECT(C:\U
+            -SERS\BERNA\DOCUMENTS\SSCT 2020 - 2021\OJT\REQUIREMENTS\OJT REQUIREM
+            -ENTS 2\C LANGUAGE CODE\MAINCODE1.OBJ) PIN(C:\RIDE\INC;C:\RIDE\INC\5
+            -1) PIN(C:\RIDE\INC\51\) NOAM PR(C:\USERS\BERNA\DOCUMENTS\SSCT 2020 
+            -- 2021\OJT\REQUIREMENTS\OJT REQUIREMENTS 2\C LANGUAGE CODE\MAINCODE
+            -1.LST) CD SB OE(1) SM FP(NOFLOAT) PW(80) NOIS UNSIGNEDCHAR ET(CHAR)
+            - 
+
+stmt level    source
+   1          /* ----HEADERS---- */
+   2          #include<stdio.h>
+   3          #include <reg51.h>						
+   4          #define SEVENSEGMENT P1	// All Port1 is for the 7-segment display 
+            -called "SEVENSEGMENT" (A,B,C,D,E,F,G)
+   5          
+   6          /* ----PINS CONFIG---- */
+   7          
+   8          // 74LS154 IC
+   9          sbit dataA = P3^2;	// 74154 A Pin
+  10          sbit dataB = P3^3;	// 74154 B Pin
+  11          sbit dataC = P3^4;	// 74154 C Pin
+  12          sbit dataD = P3^5;	// 74154 D Pin
+  13          
+  14          // 74LS148 IC
+  15          sbit A0 = P3^7;	//	74LS148 A0 Pin = Inverted
+  16          sbit A1 = P3^1;   // 74LS148 A1 Pin = Inverted
+  17          sbit A2= P3^0;   // 74LS148 A2 Pin = Inverted
+  18          
+  19          void delay(int n) {	// Delay Function
+  20   1      	while(n--);
+  21   1      }
+  22          void main (){
+  23   1      
+  24   1      	char SevenSegDigit[]={0xc0,0xf9 ,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x
+            -80,0x90}; // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] HEX for Common Anode 7 
+            -Seg Display
+  25   1      
+  26   1      	/* ----Declaring of Variables---- */
+  27   1      	
+  28   1      	// For HOME SCORE
+  29   1      	int homeScore = 0;
+  30   1      	int homeScoring = 0;	// Will serve as a button debounce
+  31   1      	
+  32   1      	// For GUEST SCORE	
+  33   1      	int guestScore = 0;
+  34   1      	int guestScoring = 0;	// Will serve as a button debounce
+  35   1      	
+  36   1      	// For the Shot Clock
+  37   1      	float shotClock = 24;
+  38   1      	
+  39   1      	// For the Game Clock
+  40   1      	float gameClock = 1000;
+  41   1      	
+  42   1      	// For the Quarter
+  43   1      	int quarter = 1;	// Default should be 1
+  44   1      	
+  45   1      	// For Pausing both the Game and Shot Clocks
+  46   1      	int pause = 0;
+  47   1      	int pausing = 0;
+  48   1      	int adding = 0;	// Will serve as a button debounce
+  49   1      	
+  50   1      		/* ----Main Functionalities in a loop ---- */
+  51   1      		while(1){
+  52   2      			/* ----Calculations for every required function---- */
+  53   2      			
+  54   2      			/* ----Game Clock and Shot Clock Digits Calculations---- */
+  55   2      			
+  56   2      			int shotClockTimer = (int)shotClock;	// 24
+  57   2      			int gameClockTimer = (int)gameClock;	// 1000
+  58   2      			
+  59   2      			/*-Shot Clock- [24]*/
+  60   2      			int shotClockDigitOne = shotClockTimer%10;	// [24%10 = 4]	= Dig
+            -it 1	
+  61   2      			int v = shotClockTimer/10; // [24/10 = 2]
+  62   2      			int shotClockDigitTwo = v%10;	// [2%10 = 2]	= Digit 2
+  63   2      			
+  64   2      			/*-Game Clock- [10:00]*/
+  65   2      			int gameClockDigitOne = gameClockTimer%10;	// [1000 % 10 = 0]	=
+            - Digit 1
+  66   2      			int o = gameClockTimer/10;	// [1000/10 = 100]
+  67   2      			int gameClockDigitTwo = o%10;	// [100%10 = 0]	= Digit 2
+  68   2      			int p = o/10;	// [100/10 = 10]
+  69   2      			int gameClockDigitThree = p%10;	// [10%10 = 0]	= Digit 3
+  70   2      			int gameClockDigitFour = p/10; // [10/10 = 1]	= Digit 4
+  71   2      			
+  72   2      			/* ----Home and Guest Scores Digits Calculations---- */	
+  73   2      			
+  74   2      			/*-Default Score - [X000]*/
+  75   2      			/*-Increment Score by 1 should result to [X001]*/
+  76   2      			/*-Incrementing Score to 11 should result to [X011]*/
+  77   2      			int homeScoreDigitOne = homeScore%10;	// [0%10 = 0]	: [1%10 = 1
+            -] : [11%10 = 1]	= Digit 1
+  78   2      			int n = homeScore/10;	// [0/10 = 0]	:	[1/10 = 0] : [11/10 = 1]
+  79   2      			int homeScoreDigitTwo = n%10;	// [0%10 = 0]	:	[0%10 = 0] : [1%1
+            -0 = 1]	= Digit 2
+  80   2      			int homeScoreDigitThree = n/10;	// [0/10 = 0]	:	[0/10 = 0] : [1
+            -/10 = 0]	= Digit 3
+  81   2      			
+  82   2      			/* -Guest Score- */
+  83   2      			int guestScoreDigitOne = guestScore%10;	// [0%10 = 0]
+  84   2      			int y = guestScore/10;	// [0/10 = 0]
+  85   2      			int guestScoreDigitTwo = y%10;	// [0%10 = 0]
+  86   2      			int guestScoreDigitThree = y/10;	// [0/10 = 0]
+  87   2      			
+  88   2      			
+  89   2      			
+  90   2      			/********************************/
+  91   2      			/* ----BUTTONS from 74LS148---- */
+  92   2      			/********************************/
+  93   2      			
+  94   2      			// HOME SCORE
+  95   2      			// If corresponding btn is pressed, increment Home Score
+  96   2      			if(A0==0 && A1==1 && A2==1 && homeScoring ==0){	// If 74LS148 P
+            -in 1 is LOW, increment homeScore variable
+  97   3      				homeScore = homeScore + 1;
+  98   3      				homeScoring = 1;
+  99   3      			}
+ 100   2      			
+ 101   2      			// GUEST SCORE
+ 102   2      			// If corresponding btn is pressed, increment Guest Score 
+ 103   2      			if(A0==1 && A1==0 && A2==1 && guestScoring ==0){	// If 74LS148 
+            -Pin 2 is LOW, increment guestScore variable
+ 104   3      				guestScore = guestScore + 1;	
+ 105   3      				guestScoring = 1;
+ 106   3      			}
+ 107   2      			
+ 108   2      			// SHOT CLOCK
+ 109   2      			// If corresponding btn is pressed, reset Shot Clock
+ 110   2      			if(A0==0 && A1==0 && A2==1){	// If 74LS148 Pin 3 is LOW, set sh
+            -otClock variable to default w/c is 24
+ 111   3      				shotClock = 25;
+ 112   3      			}
+ 113   2      			
+ 114   2      			// GAME CLOCK
+ 115   2      			// If corresponding btn is pressed, reset Game Clock
+ 116   2      			if(A0==1 && A1==1 && A2==0){	// If 74LS148 Pin 4 is LOW, set ga
+            -meClock variable to 960
+ 117   3      				gameClock = 960;
+ 118   3      			}
+ 119   2      			
+ 120   2      			// GAME QUARTER
+ 121   2      			// If corresponding btn is pressed, increment quarter by 1
+ 122   2      			if(A0==1 && A1==0 && A2==0 && adding==0){	// Pin 6
+ 123   3      				if(quarter<4){	// Increment if value is less than 4 else, rese
+            -t quarter to 1
+ 124   4      					quarter = quarter + 1;
+ 125   4      					adding = 1;
+ 126   4      				}else{
+ 127   4      					quarter = 1;
+ 128   4      					adding = 1;
+ 129   4      				}
+ 130   3      			}
+ 131   2      			
+ 132   2      			// PAUSE BOTH SHOT and GAME CLOCKS
+ 133   2      			// If corresponding btn is pressed, and pause is false, then in
+            -crement pause to return true (1).
+ 134   2      			// The new returned pause variable will enable pausing of the c
+            -lock ( Function for it is in the bottom part of the code)
+ 135   2      			if(A0==0 && A1==1 && A2==0 && pausing ==0){	// Pin 5
+ 136   3      				if(pause==0){
+ 137   4      					pause = pause +1;
+ 138   4      					pausing = 1;
+ 139   4      				}else{
+ 140   4      					pause = pause -1;
+ 141   4      					//shotClock=25;
+ 142   4      					pausing = 1;
+ 143   4      				}
+ 144   3      			}
+ 145   2      			
+ 146   2      			// BUTTON DEBOUNCE
+ 147   2      			// To ensure that a btn is only pressed ONCE, add these to ever
+            -y specific "if conditions" of every buttons
+ 148   2      			if(A0==1 && A1==1 && A2==1){
+ 149   3      				homeScoring = 0;
+ 150   3      				guestScoring = 0;
+ 151   3      				pausing = 0;
+ 152   3      				adding = 0;
+ 153   3      			}			
+ 154   2      			
+ 155   2      			
+ 156   2      			
+ 157   2      			/********************************************/
+ 158   2      			/* --DISPLAY Digits to 7seg using 74LS154-- */
+ 159   2      			/********************************************/
+ 160   2      			
+ 161   2      			/*------------------HOME SCORE------------------*/
+ 162   2      			
+ 163   2      			// 1st DIGIT
+ 164   2      			/*Start of Blank*/
+ 165   2      			dataA = 0;
+ 166   2      			dataB = 1;
+ 167   2      			dataC = 1;
+ 168   2      			dataD = 0;
+ 169   2      			delay(10);
+ 170   2      			/*End of Blank*/
+ 171   2      			SEVENSEGMENT = SevenSegDigit[homeScoreDigitOne];	// What to dis
+            -play in the 7 seg (Array based)
+ 172   2      			/* 74154 Pin 0*/
+ 173   2      			dataA = 0;
+ 174   2      			dataB = 0;
+ 175   2      			dataC = 0;
+ 176   2      			dataD = 0;
+ 177   2      			delay(100);
+ 178   2      			/*end*/
+ 179   2      			
+ 180   2      			// 2nd DIGIT
+ 181   2      			/*Start of Blank*/
+ 182   2      			dataA = 0;
+ 183   2      			dataB = 1;
+ 184   2      			dataC = 1;
+ 185   2      			dataD = 0;
+ 186   2      			delay(10);
+ 187   2      			/*End of Blank*/
+ 188   2      			SEVENSEGMENT = SevenSegDigit[homeScoreDigitTwo];	// What to dis
+            -play in the 7 seg (Array based)
+ 189   2      			/* 74154 Pin 1*/
+ 190   2      			dataA = 1;
+ 191   2      			dataB = 0;
+ 192   2      			dataC = 0;
+ 193   2      			dataD = 0;
+ 194   2      			delay(100);
+ 195   2      			/*end*/
+ 196   2      			
+ 197   2      			// 3rd DIGIT
+ 198   2      			/*Start of Blank*/
+ 199   2      			dataA = 0;
+ 200   2      			dataB = 1;
+ 201   2      			dataC = 1;
+ 202   2      			dataD = 0;
+ 203   2      			delay(10);
+ 204   2      			/*End of Blank*/
+ 205   2      			/* 74154 Pin 2*/
+ 206   2      			SEVENSEGMENT = SevenSegDigit[homeScoreDigitThree];	// What to d
+            -isplay in the 7 seg (Array based)
+ 207   2      			dataA = 0;
+ 208   2      			dataB = 1;
+ 209   2      			dataC = 0;
+ 210   2      			dataD = 0;
+ 211   2      			delay(100);
+ 212   2      			/*end*/
+ 213   2      			
+ 214   2      			/*------------------END of HOME SCORE------------------*/
+ 215   2      			
+ 216   2      			/*------------------GUEST SCORE------------------*/
+ 217   2      			
+ 218   2      			// 1st DIGIT
+ 219   2      			/*Start of Blank*/
+ 220   2      			dataA = 0;
+ 221   2      			dataB = 1;
+ 222   2      			dataC = 1;
+ 223   2      			dataD = 0;
+ 224   2      			delay(10);
+ 225   2      			/*End of Blank*/
+ 226   2      			SEVENSEGMENT = SevenSegDigit[guestScoreDigitOne];	// What to di
+            -splay in the 7 seg (Array based)
+ 227   2      			/* 74154 Pin 3*/
+ 228   2      			dataA = 1;
+ 229   2      			dataB = 1;
+ 230   2      			dataC = 0;
+ 231   2      			dataD = 0;
+ 232   2      			delay(100);
+ 233   2      			/*end*/
+ 234   2      			
+ 235   2      			// 2nd DIGIT
+ 236   2      			/*Start of Blank*/
+ 237   2      			dataA = 0;
+ 238   2      			dataB = 1;
+ 239   2      			dataC = 1;
+ 240   2      			dataD = 0;
+ 241   2      			delay(10);
+ 242   2      			/*End of Blank*/
+ 243   2      			SEVENSEGMENT = SevenSegDigit[guestScoreDigitTwo];	// What to di
+            -splay in the 7 seg (Array based)
+ 244   2      			/* 74154 Pin 4*/
+ 245   2      			dataA = 0;
+ 246   2      			dataB = 0;
+ 247   2      			dataC = 1;
+ 248   2      			dataD = 0;
+ 249   2      			delay(100);
+ 250   2      			/*end*/
+ 251   2      			
+ 252   2      			// 3rd DIGIT
+ 253   2      			/*Start of Blank*/
+ 254   2      			dataA = 0;
+ 255   2      			dataB = 1;
+ 256   2      			dataC = 1;
+ 257   2      			dataD = 0;
+ 258   2      			delay(10);
+ 259   2      			/*End of Blank*/
+ 260   2      			SEVENSEGMENT = SevenSegDigit[guestScoreDigitThree];	// What to 
+            -display in the 7 seg (Array based)
+ 261   2      			/* 74154 Pin 5*/
+ 262   2      			dataA = 1;
+ 263   2      			dataB = 0;
+ 264   2      			dataC = 1;
+ 265   2      			dataD = 0;
+ 266   2      			delay(100);
+ 267   2      			/*end*/
+ 268   2      			
+ 269   2      			/*------------------END of GUEST SCORE------------------*/
+ 270   2      			
+ 271   2      			/*----------------------SHOT CLOCK----------------------*/
+ 272   2      		
+ 273   2      			// 1st DIGIT
+ 274   2      			/*Start of Blank*/
+ 275   2      			dataA = 0;
+ 276   2      			dataB = 1;
+ 277   2      			dataC = 1;
+ 278   2      			dataD = 0;
+ 279   2      			delay(10);
+ 280   2      			/*End of Blank*/
+ 281   2      			SEVENSEGMENT = SevenSegDigit[shotClockDigitOne];	// 5
+ 282   2      			/* 74154 Pin 7*/
+ 283   2      			dataA = 1;
+ 284   2      			dataB = 1;
+ 285   2      			dataC = 1;
+ 286   2      			dataD = 0;
+ 287   2      			delay(100);
+ 288   2      			/*end*/
+ 289   2      			
+ 290   2      			// 2nd DIGIT
+ 291   2      			/*Start of Blank*/
+ 292   2      			dataA = 0;
+ 293   2      			dataB = 1;
+ 294   2      			dataC = 1;
+ 295   2      			dataD = 0;
+ 296   2      			delay(10);
+ 297   2      			/*End of Blank*/
+ 298   2      			SEVENSEGMENT = SevenSegDigit[shotClockDigitTwo];	//	2
+ 299   2      			/* 74154 Pin 8*/
+ 300   2      			dataA = 0;
+ 301   2      			dataB = 0;
+ 302   2      			dataC = 0;
+ 303   2      			dataD = 1;
+ 304   2      			delay(100);
+ 305   2      			/*end*/
+ 306   2      			
+ 307   2      			/*--------------------END of SHOT CLOCK---------------------*/	
+            -	
+ 308   2      			
+ 309   2      			/*----------------------GAME CLOCK----------------------*/
+ 310   2      			
+ 311   2      			// 1st DIGIT
+ 312   2      			/*Start of Blank*/
+ 313   2      			dataA = 0;
+ 314   2      			dataB = 1;
+ 315   2      			dataC = 1;
+ 316   2      			dataD = 0;
+ 317   2      			delay(10);
+ 318   2      			/*End of Blank*/
+ 319   2      			SEVENSEGMENT = SevenSegDigit[gameClockDigitOne];
+ 320   2      			/* 74154 Pin 9*/
+ 321   2      			dataA = 1;
+ 322   2      			dataB = 0;
+ 323   2      			dataC = 0;
+ 324   2      			dataD = 1;
+ 325   2      			delay(100);
+ 326   2      			
+ 327   2      			// 2nd DIGIT
+ 328   2      			/*Start of Blank*/
+ 329   2      			dataA = 0;
+ 330   2      			dataB = 1;
+ 331   2      			dataC = 1;
+ 332   2      			dataD = 0;
+ 333   2      			delay(10);
+ 334   2      			/*End of Blank*/
+ 335   2      			SEVENSEGMENT = SevenSegDigit[gameClockDigitTwo];
+ 336   2      			/* 74154 Pin 10*/
+ 337   2      			dataA = 0;
+ 338   2      			dataB = 1;
+ 339   2      			dataC = 0;
+ 340   2      			dataD = 1;
+ 341   2      			delay(100);
+ 342   2      			/*End of Blank*/
+ 343   2      			
+ 344   2      			// 3rd DIGIT
+ 345   2      			/*Start of Blank*/
+ 346   2      			dataA = 0;
+ 347   2      			dataB = 1;
+ 348   2      			dataC = 1;
+ 349   2      			dataD = 0;
+ 350   2      			delay(10);
+ 351   2      			/*End of Blank*/
+ 352   2      			SEVENSEGMENT = SevenSegDigit[gameClockDigitThree];
+ 353   2      			/* 74154 Pin 11*/
+ 354   2      			dataA = 1;
+ 355   2      			dataB = 1;
+ 356   2      			dataC = 0;
+ 357   2      			dataD = 1;
+ 358   2      			delay(100);
+ 359   2      			/*End of Blank*/
+ 360   2      			
+ 361   2      			// 4th DIGIT
+ 362   2      			/*Start of Blank*/
+ 363   2      			dataA = 0;
+ 364   2      			dataB = 1;
+ 365   2      			dataC = 1;
+ 366   2      			dataD = 0;
+ 367   2      			delay(10);
+ 368   2      			/*End of Blank*/
+ 369   2      			SEVENSEGMENT = SevenSegDigit[gameClockDigitFour];
+ 370   2      			/* 74154 Pin 12*/
+ 371   2      			dataA = 0;
+ 372   2      			dataB = 0;
+ 373   2      			dataC = 1;
+ 374   2      			dataD = 1;
+ 375   2      			delay(100);
+ 376   2      			/*End of Blank*/
+ 377   2      			
+ 378   2      			/*--------------------END of GAME CLOCK---------------------*/	
+            -
+ 379   2      			
+ 380   2      			/*------------------QUARTER------------------*/
+ 381   2      			
+ 382   2      			/*Start of Blank*/
+ 383   2      			dataA = 0;
+ 384   2      			dataB = 1;
+ 385   2      			dataC = 1;
+ 386   2      			dataD = 0;
+ 387   2      			delay(10);
+ 388   2      			/*End of Blank*/
+ 389   2      			SEVENSEGMENT = SevenSegDigit[quarter];
+ 390   2      			/* 74154 Pin 13*/
+ 391   2      			dataA = 1;
+ 392   2      			dataB = 0;
+ 393   2      			dataC = 1;
+ 394   2      			dataD = 1;
+ 395   2      			delay(100);
+ 396   2      			/*End of Blank*/
+ 397   2      			
+ 398   2      			/*------------------END of QUARTER------------------*/	
+ 399   2      			
+ 400   2      			/*----------------COUNTDOWN/ TIMER DECREMENT----------------*/
+ 401   2      			
+ 402   2      			if(pause==0){	// if not paused, decrement shot clock by 0.09
+ 403   3      				if(shotClock>0){
+ 404   4      					shotClock = shotClock - 0.09; 
+ 405   4      				 }
+ 406   3      			 }
+ 407   2      			
+ 408   2      			if(pause==0){	// if not paused, decrement game clock by 0.09
+ 409   3      				if(gameClock>0){
+ 410   4      					if(gameClockDigitTwo==0 && gameClockDigitOne==0){
+ 411   5      						gameClock = gameClock - 40;
+ 412   5      					}
+ 413   4      				gameClock = gameClock - 0.09;
+ 414   4      				}
+ 415   3      			}
+ 416   2      			
+ 417   2      			/*-------------END of COUNTDOWN/ TIMER DECREMENT-------------*/
+            -		
+ 418   2      		}
+ 419   1      }
+ 420           
+ 421          
+RC51 COMPILER V03.03.42,  MAINCODE1               08/05/21  13:32:27  PAGE  2
+
+ASSEMBLY LISTING OF GENERATED OBJECT CODE
+
+            ; FUNCTION _delay (BEGIN)
+              ; Register R6R7 is assigned to parameter n
+0000         ?WHILE1:
+                                           ; SOURCE LINE # 20 
+0000 8E02           MOV    AR2,R6
+0002 8F03           MOV    AR3,R7
+0004 EF             MOV    A,R7
+0005 1F             DEC    R7
+0006 7001           JNZ    ?LAB2
+0008 1E             DEC    R6
+0009         ?LAB2:
+0009 EA             MOV    A,R2
+000A 4B             ORL    A,R3
+000B 70F3           JNZ    ?WHILE1
+                                           ; SOURCE LINE # 21 
+000D 22             RET    
+
+            ; FUNCTION _delay (END)
+
+            ; FUNCTION main (BEGIN)
+                                           ; SOURCE LINE # 24 
+0000 7D05           MOV    R5,#005H
+0002 7C00    R      MOV    R4,#HIGH(?STR?MAINCODE1?BASE)
+0004 7800    R      MOV    R0,#LOW(?STR?MAINCODE1?BASE)
+0006 7B01           MOV    R3,#001H
+0008 E4             CLR    A
+0009 FA             MOV    R2,A
+000A 7900    R      MOV    R1,#SevenSegDigit
+000C 7E0A           MOV    R6,#00AH
+000E 120000  R      LCALL  ?C_CPY
+                                           ; SOURCE LINE # 29 
+0011 E4             CLR    A
+0012 F500    R      MOV    homeScore,A
+0014 F500    R      MOV    homeScore+01H,A
+                                           ; SOURCE LINE # 30 
+0016 F500    R      MOV    homeScoring,A
+0018 F500    R      MOV    homeScoring+01H,A
+                                           ; SOURCE LINE # 33 
+001A F500    R      MOV    guestScore,A
+001C F500    R      MOV    guestScore+01H,A
+                                           ; SOURCE LINE # 34 
+001E F500    R      MOV    guestScoring,A
+0020 F500    R      MOV    guestScoring+01H,A
+                                           ; SOURCE LINE # 37 
+0022 F500    R      MOV    shotClock,A
+0024 F500    R      MOV    shotClock+01H,A
+0026 7500C0  R      MOV    shotClock+02H,#0C0H
+0029 750041  R      MOV    shotClock+03H,#041H
+                                           ; SOURCE LINE # 40 
+002C F500    R      MOV    gameClock,A
+002E F500    R      MOV    gameClock+01H,A
+0030 75007A  R      MOV    gameClock+02H,#07AH
+0033 750044  R      MOV    gameClock+03H,#044H
+                                           ; SOURCE LINE # 43 
+0036 F500    R      MOV    quarter,A
+0038 750001  R      MOV    quarter+01H,#001H
+                                           ; SOURCE LINE # 46 
+003B F500    R      MOV    pause,A
+003D F500    R      MOV    pause+01H,A
+                                           ; SOURCE LINE # 47 
+003F F500    R      MOV    pausing,A
+0041 F500    R      MOV    pausing+01H,A
+                                           ; SOURCE LINE # 48 
+0043 F500    R      MOV    adding,A
+0045 F500    R      MOV    adding+01H,A
+0047         ?WHILE3:
+                                           ; SOURCE LINE # 56 
+0047 AC00    R      MOV    R4,shotClock
+0049 AD00    R      MOV    R5,shotClock+01H
+004B AE00    R      MOV    R6,shotClock+02H
+004D AF00    R      MOV    R7,shotClock+03H
+004F 120000  R      LCALL  ?CV_IEEE_LS
+0052 8E00    R      MOV    shotClockTimer,R6
+0054 8F00    R      MOV    shotClockTimer+01H,R7
+                                           ; SOURCE LINE # 57 
+0056 AC00    R      MOV    R4,gameClock
+0058 AD00    R      MOV    R5,gameClock+01H
+005A AE00    R      MOV    R6,gameClock+02H
+005C AF00    R      MOV    R7,gameClock+03H
+005E 120000  R      LCALL  ?CV_IEEE_LS
+0061 8E00    R      MOV    gameClockTimer,R6
+0063 8F00    R      MOV    gameClockTimer+01H,R7
+                                           ; SOURCE LINE # 60 
+0065 AE00    R      MOV    R6,shotClockTimer
+0067 AF00    R      MOV    R7,shotClockTimer+01H
+0069 E4             CLR    A
+006A FC             MOV    R4,A
+006B 7D0A           MOV    R5,#00AH
+006D 120000  R      LCALL  ?C_SIDIV
+0070 8C00    R      MOV    shotClockDigitOne,R4
+0072 8D00    R      MOV    shotClockDigitOne+01H,R5
+                                           ; SOURCE LINE # 61 
+0074 AE00    R      MOV    R6,shotClockTimer
+0076 AF00    R      MOV    R7,shotClockTimer+01H
+0078 E4             CLR    A
+0079 FC             MOV    R4,A
+007A 7D0A           MOV    R5,#00AH
+007C 120000  R      LCALL  ?C_SIDIV
+007F 8E00    R      MOV    v,R6
+0081 8F00    R      MOV    v+01H,R7
+                                           ; SOURCE LINE # 62 
+0083 AE00    R      MOV    R6,v
+0085 AF00    R      MOV    R7,v+01H
+0087 E4             CLR    A
+0088 FC             MOV    R4,A
+0089 7D0A           MOV    R5,#00AH
+008B 120000  R      LCALL  ?C_SIDIV
+008E 8C00    R      MOV    shotClockDigitTwo,R4
+0090 8D00    R      MOV    shotClockDigitTwo+01H,R5
+                                           ; SOURCE LINE # 65 
+0092 AE00    R      MOV    R6,gameClockTimer
+0094 AF00    R      MOV    R7,gameClockTimer+01H
+0096 E4             CLR    A
+0097 FC             MOV    R4,A
+0098 7D0A           MOV    R5,#00AH
+009A 120000  R      LCALL  ?C_SIDIV
+009D 8C00    R      MOV    gameClockDigitOne,R4
+009F 8D00    R      MOV    gameClockDigitOne+01H,R5
+                                           ; SOURCE LINE # 66 
+00A1 AE00    R      MOV    R6,gameClockTimer
+00A3 AF00    R      MOV    R7,gameClockTimer+01H
+00A5 E4             CLR    A
+00A6 FC             MOV    R4,A
+00A7 7D0A           MOV    R5,#00AH
+00A9 120000  R      LCALL  ?C_SIDIV
+00AC 8E00    R      MOV    o,R6
+00AE 8F00    R      MOV    o+01H,R7
+                                           ; SOURCE LINE # 67 
+00B0 AE00    R      MOV    R6,o
+00B2 AF00    R      MOV    R7,o+01H
+00B4 E4             CLR    A
+00B5 FC             MOV    R4,A
+00B6 7D0A           MOV    R5,#00AH
+00B8 120000  R      LCALL  ?C_SIDIV
+00BB 8C00    R      MOV    gameClockDigitTwo,R4
+00BD 8D00    R      MOV    gameClockDigitTwo+01H,R5
+                                           ; SOURCE LINE # 68 
+00BF AE00    R      MOV    R6,o
+00C1 AF00    R      MOV    R7,o+01H
+00C3 E4             CLR    A
+00C4 FC             MOV    R4,A
+00C5 7D0A           MOV    R5,#00AH
+00C7 120000  R      LCALL  ?C_SIDIV
+00CA 8E00    R      MOV    p,R6
+00CC 8F00    R      MOV    p+01H,R7
+                                           ; SOURCE LINE # 69 
+00CE AE00    R      MOV    R6,p
+00D0 AF00    R      MOV    R7,p+01H
+00D2 E4             CLR    A
+00D3 FC             MOV    R4,A
+00D4 7D0A           MOV    R5,#00AH
+00D6 120000  R      LCALL  ?C_SIDIV
+00D9 8C00    R      MOV    gameClockDigitThree,R4
+00DB 8D00    R      MOV    gameClockDigitThree+01H,R5
+                                           ; SOURCE LINE # 70 
+00DD AE00    R      MOV    R6,p
+00DF AF00    R      MOV    R7,p+01H
+00E1 E4             CLR    A
+00E2 FC             MOV    R4,A
+00E3 7D0A           MOV    R5,#00AH
+00E5 120000  R      LCALL  ?C_SIDIV
+00E8 8E00    R      MOV    gameClockDigitFour,R6
+00EA 8F00    R      MOV    gameClockDigitFour+01H,R7
+                                           ; SOURCE LINE # 77 
+00EC AE00    R      MOV    R6,homeScore
+00EE AF00    R      MOV    R7,homeScore+01H
+00F0 E4             CLR    A
+00F1 FC             MOV    R4,A
+00F2 7D0A           MOV    R5,#00AH
+00F4 120000  R      LCALL  ?C_SIDIV
+00F7 8C00    R      MOV    homeScoreDigitOne,R4
+00F9 8D00    R      MOV    homeScoreDigitOne+01H,R5
+                                           ; SOURCE LINE # 78 
+00FB AE00    R      MOV    R6,homeScore
+00FD AF00    R      MOV    R7,homeScore+01H
+00FF E4             CLR    A
+0100 FC             MOV    R4,A
+0101 7D0A           MOV    R5,#00AH
+0103 120000  R      LCALL  ?C_SIDIV
+0106 8E00    R      MOV    n,R6
+0108 8F00    R      MOV    n+01H,R7
+                                           ; SOURCE LINE # 79 
+010A AE00    R      MOV    R6,n
+010C AF00    R      MOV    R7,n+01H
+010E E4             CLR    A
+010F FC             MOV    R4,A
+0110 7D0A           MOV    R5,#00AH
+0112 120000  R      LCALL  ?C_SIDIV
+0115 8C00    R      MOV    homeScoreDigitTwo,R4
+0117 8D00    R      MOV    homeScoreDigitTwo+01H,R5
+                                           ; SOURCE LINE # 80 
+0119 AE00    R      MOV    R6,n
+011B AF00    R      MOV    R7,n+01H
+011D E4             CLR    A
+011E FC             MOV    R4,A
+011F 7D0A           MOV    R5,#00AH
+0121 120000  R      LCALL  ?C_SIDIV
+0124 8E00    R      MOV    homeScoreDigitThree,R6
+0126 8F00    R      MOV    homeScoreDigitThree+01H,R7
+                                           ; SOURCE LINE # 83 
+0128 AE00    R      MOV    R6,guestScore
+012A AF00    R      MOV    R7,guestScore+01H
+012C E4             CLR    A
+012D FC             MOV    R4,A
+012E 7D0A           MOV    R5,#00AH
+0130 120000  R      LCALL  ?C_SIDIV
+0133 8C00    R      MOV    guestScoreDigitOne,R4
+0135 8D00    R      MOV    guestScoreDigitOne+01H,R5
+                                           ; SOURCE LINE # 84 
+0137 AE00    R      MOV    R6,guestScore
+0139 AF00    R      MOV    R7,guestScore+01H
+013B E4             CLR    A
+013C FC             MOV    R4,A
+013D 7D0A           MOV    R5,#00AH
+013F 120000  R      LCALL  ?C_SIDIV
+0142 8E00    R      MOV    y,R6
+0144 8F00    R      MOV    y+01H,R7
+                                           ; SOURCE LINE # 85 
+0146 AE00    R      MOV    R6,y
+0148 AF00    R      MOV    R7,y+01H
+014A E4             CLR    A
+014B FC             MOV    R4,A
+014C 7D0A           MOV    R5,#00AH
+014E 120000  R      LCALL  ?C_SIDIV
+0151 8C00    R      MOV    guestScoreDigitTwo,R4
+0153 8D00    R      MOV    guestScoreDigitTwo+01H,R5
+                                           ; SOURCE LINE # 86 
+0155 AE00    R      MOV    R6,y
+0157 AF00    R      MOV    R7,y+01H
+0159 E4             CLR    A
+015A FC             MOV    R4,A
+015B 7D0A           MOV    R5,#00AH
+015D 120000  R      LCALL  ?C_SIDIV
+0160 8E00    R      MOV    guestScoreDigitThree,R6
+0162 8F00    R      MOV    guestScoreDigitThree+01H,R7
+                                           ; SOURCE LINE # 96 
+0164 20B71A         JB     A0,?NXT18
+0167 30B117         JNB    A1,?NXT18
+016A 30B014         JNB    A2,?NXT18
+016D E500    R      MOV    A,homeScoring
+016F 4500    R      ORL    A,homeScoring+01H
+0171 700E           JNZ    ?NXT18
+                                           ; SOURCE LINE # 97 
+0173 0500    R      INC    homeScore+01H
+0175 E500    R      MOV    A,homeScore+01H
+0177 7002           JNZ    ?LAB33
+0179 0500    R      INC    homeScore
+017B         ?LAB33:
+                                           ; SOURCE LINE # 98 
+017B E4             CLR    A
+017C F500    R      MOV    homeScoring,A
+017E 750001  R      MOV    homeScoring+01H,#001H
+0181         ?NXT18:
+                                           ; SOURCE LINE # 103 
+0181 30B71A         JNB    A0,?NXT19
+0184 20B117         JB     A1,?NXT19
+0187 30B014         JNB    A2,?NXT19
+018A E500    R      MOV    A,guestScoring
+018C 4500    R      ORL    A,guestScoring+01H
+018E 700E           JNZ    ?NXT19
+                                           ; SOURCE LINE # 104 
+0190 0500    R      INC    guestScore+01H
+0192 E500    R      MOV    A,guestScore+01H
+0194 7002           JNZ    ?LAB37
+0196 0500    R      INC    guestScore
+0198         ?LAB37:
+                                           ; SOURCE LINE # 105 
+0198 E4             CLR    A
+0199 F500    R      MOV    guestScoring,A
+019B 750001  R      MOV    guestScoring+01H,#001H
+019E         ?NXT19:
+                                           ; SOURCE LINE # 110 
+019E 20B711         JB     A0,?NXT20
+01A1 20B10E         JB     A1,?NXT20
+01A4 30B00B         JNB    A2,?NXT20
+                                           ; SOURCE LINE # 111 
+01A7 E4             CLR    A
+01A8 F500    R      MOV    shotClock,A
+01AA F500    R      MOV    shotClock+01H,A
+01AC 7500C8  R      MOV    shotClock+02H,#0C8H
+01AF 750041  R      MOV    shotClock+03H,#041H
+01B2         ?NXT20:
+                                           ; SOURCE LINE # 116 
+01B2 30B711         JNB    A0,?NXT21
+01B5 30B10E         JNB    A1,?NXT21
+01B8 20B00B         JB     A2,?NXT21
+                                           ; SOURCE LINE # 117 
+01BB E4             CLR    A
+01BC F500    R      MOV    gameClock,A
+01BE F500    R      MOV    gameClock+01H,A
+01C0 750070  R      MOV    gameClock+02H,#070H
+01C3 750044  R      MOV    gameClock+03H,#044H
+01C6         ?NXT21:
+                                           ; SOURCE LINE # 122 
+01C6 30B735         JNB    A0,?NXT22
+01C9 20B132         JB     A1,?NXT22
+01CC 20B02F         JB     A2,?NXT22
+01CF E500    R      MOV    A,adding
+01D1 4500    R      ORL    A,adding+01H
+01D3 7029           JNZ    ?NXT22
+                                           ; SOURCE LINE # 123 
+01D5 E500    R      MOV    A,quarter
+01D7 6480           XRL    A,#080H
+01D9 B48005         CJNE   A,#080H,?LAB45
+01DC E500    R      MOV    A,quarter+01H
+01DE B40400         CJNE   A,#004H,?LAB45
+01E1         ?LAB45:
+01E1 5010           JNC    ?ELSE19
+                                           ; SOURCE LINE # 124 
+01E3 0500    R      INC    quarter+01H
+01E5 E500    R      MOV    A,quarter+01H
+01E7 7002           JNZ    ?LAB47
+01E9 0500    R      INC    quarter
+01EB         ?LAB47:
+                                           ; SOURCE LINE # 125 
+01EB E4             CLR    A
+01EC F500    R      MOV    adding,A
+01EE 750001  R      MOV    adding+01H,#001H
+01F1 800B           SJMP   ?NXT22
+01F3         ?ELSE19:
+                                           ; SOURCE LINE # 127 
+01F3 E4             CLR    A
+01F4 F500    R      MOV    quarter,A
+01F6 750001  R      MOV    quarter+01H,#001H
+                                           ; SOURCE LINE # 128 
+01F9 F500    R      MOV    adding,A
+01FB 750001  R      MOV    adding+01H,#001H
+01FE         ?NXT22:
+                                           ; SOURCE LINE # 135 
+01FE 20B735         JB     A0,?NXT24
+0201 30B132         JNB    A1,?NXT24
+0204 20B02F         JB     A2,?NXT24
+0207 E500    R      MOV    A,pausing
+0209 4500    R      ORL    A,pausing+01H
+020B 7029           JNZ    ?NXT24
+                                           ; SOURCE LINE # 136 
+020D E500    R      MOV    A,pause
+020F 4500    R      ORL    A,pause+01H
+0211 7010           JNZ    ?ELSE21
+                                           ; SOURCE LINE # 137 
+0213 0500    R      INC    pause+01H
+0215 E500    R      MOV    A,pause+01H
+0217 7002           JNZ    ?LAB51
+0219 0500    R      INC    pause
+021B         ?LAB51:
+                                           ; SOURCE LINE # 138 
+021B E4             CLR    A
+021C F500    R      MOV    pausing,A
+021E 750001  R      MOV    pausing+01H,#001H
+0221 8013           SJMP   ?NXT24
+0223         ?ELSE21:
+                                           ; SOURCE LINE # 140 
+0223 E500    R      MOV    A,pause+01H
+0225 24FF           ADD    A,#0FFH
+0227 FB             MOV    R3,A
+0228 E500    R      MOV    A,pause
+022A 34FF           ADDC   A,#0FFH
+022C F500    R      MOV    pause,A
+022E 8B00    R      MOV    pause+01H,R3
+                                           ; SOURCE LINE # 142 
+0230 E4             CLR    A
+0231 F500    R      MOV    pausing,A
+0233 750001  R      MOV    pausing+01H,#001H
+0236         ?NXT24:
+                                           ; SOURCE LINE # 148 
+0236 30B717         JNB    A0,?NXT26
+0239 30B114         JNB    A1,?NXT26
+023C 30B011         JNB    A2,?NXT26
+                                           ; SOURCE LINE # 149 
+023F E4             CLR    A
+0240 F500    R      MOV    homeScoring,A
+0242 F500    R      MOV    homeScoring+01H,A
+                                           ; SOURCE LINE # 150 
+0244 F500    R      MOV    guestScoring,A
+0246 F500    R      MOV    guestScoring+01H,A
+                                           ; SOURCE LINE # 151 
+0248 F500    R      MOV    pausing,A
+024A F500    R      MOV    pausing+01H,A
+                                           ; SOURCE LINE # 152 
+024C F500    R      MOV    adding,A
+024E F500    R      MOV    adding+01H,A
+0250         ?NXT26:
+                                           ; SOURCE LINE # 165 
+0250 C2B2           CLR    dataA
+                                           ; SOURCE LINE # 166 
+0252 D2B3           SETB   dataB
+                                           ; SOURCE LINE # 167 
+0254 D2B4           SETB   dataC
+                                           ; SOURCE LINE # 168 
+0256 C2B5           CLR    dataD
+                                           ; SOURCE LINE # 169 
+0258 E4             CLR    A
+0259 FE             MOV    R6,A
+025A 7F0A           MOV    R7,#00AH
+025C 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 171 
+025F E500    R      MOV    A,homeScoreDigitOne+01H
+0261 2400    R      ADD    A,#SevenSegDigit
+0263 F8             MOV    R0,A
+0264 8690           MOV    P1,@R0
+                                           ; SOURCE LINE # 173 
+0266 C2B2           CLR    dataA
+                                           ; SOURCE LINE # 174 
+0268 C2B3           CLR    dataB
+                                           ; SOURCE LINE # 175 
+026A C2B4           CLR    dataC
+                                           ; SOURCE LINE # 176 
+026C C2B5           CLR    dataD
+                                           ; SOURCE LINE # 177 
+026E E4             CLR    A
+026F FE             MOV    R6,A
+0270 7F64           MOV    R7,#064H
+0272 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 182 
+0275 C2B2           CLR    dataA
+                                           ; SOURCE LINE # 183 
+0277 D2B3           SETB   dataB
+                                           ; SOURCE LINE # 184 
+0279 D2B4           SETB   dataC
+                                           ; SOURCE LINE # 185 
+027B C2B5           CLR    dataD
+                                           ; SOURCE LINE # 186 
+027D E4             CLR    A
+027E FE             MOV    R6,A
+027F 7F0A           MOV    R7,#00AH
+0281 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 188 
+0284 E500    R      MOV    A,homeScoreDigitTwo+01H
+0286 2400    R      ADD    A,#SevenSegDigit
+0288 F8             MOV    R0,A
+0289 8690           MOV    P1,@R0
+                                           ; SOURCE LINE # 190 
+028B D2B2           SETB   dataA
+                                           ; SOURCE LINE # 191 
+028D C2B3           CLR    dataB
+                                           ; SOURCE LINE # 192 
+028F C2B4           CLR    dataC
+                                           ; SOURCE LINE # 193 
+0291 C2B5           CLR    dataD
+                                           ; SOURCE LINE # 194 
+0293 E4             CLR    A
+0294 FE             MOV    R6,A
+0295 7F64           MOV    R7,#064H
+0297 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 199 
+029A C2B2           CLR    dataA
+                                           ; SOURCE LINE # 200 
+029C D2B3           SETB   dataB
+                                           ; SOURCE LINE # 201 
+029E D2B4           SETB   dataC
+                                           ; SOURCE LINE # 202 
+02A0 C2B5           CLR    dataD
+                                           ; SOURCE LINE # 203 
+02A2 E4             CLR    A
+02A3 FE             MOV    R6,A
+02A4 7F0A           MOV    R7,#00AH
+02A6 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 206 
+02A9 E500    R      MOV    A,homeScoreDigitThree+01H
+02AB 2400    R      ADD    A,#SevenSegDigit
+02AD F8             MOV    R0,A
+02AE 8690           MOV    P1,@R0
+                                           ; SOURCE LINE # 207 
+02B0 C2B2           CLR    dataA
+                                           ; SOURCE LINE # 208 
+02B2 D2B3           SETB   dataB
+                                           ; SOURCE LINE # 209 
+02B4 C2B4           CLR    dataC
+                                           ; SOURCE LINE # 210 
+02B6 C2B5           CLR    dataD
+                                           ; SOURCE LINE # 211 
+02B8 E4             CLR    A
+02B9 FE             MOV    R6,A
+02BA 7F64           MOV    R7,#064H
+02BC 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 220 
+02BF C2B2           CLR    dataA
+                                           ; SOURCE LINE # 221 
+02C1 D2B3           SETB   dataB
+                                           ; SOURCE LINE # 222 
+02C3 D2B4           SETB   dataC
+                                           ; SOURCE LINE # 223 
+02C5 C2B5           CLR    dataD
+                                           ; SOURCE LINE # 224 
+02C7 E4             CLR    A
+02C8 FE             MOV    R6,A
+02C9 7F0A           MOV    R7,#00AH
+02CB 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 226 
+02CE E500    R      MOV    A,guestScoreDigitOne+01H
+02D0 2400    R      ADD    A,#SevenSegDigit
+02D2 F8             MOV    R0,A
+02D3 8690           MOV    P1,@R0
+                                           ; SOURCE LINE # 228 
+02D5 D2B2           SETB   dataA
+                                           ; SOURCE LINE # 229 
+02D7 D2B3           SETB   dataB
+                                           ; SOURCE LINE # 230 
+02D9 C2B4           CLR    dataC
+                                           ; SOURCE LINE # 231 
+02DB C2B5           CLR    dataD
+                                           ; SOURCE LINE # 232 
+02DD E4             CLR    A
+02DE FE             MOV    R6,A
+02DF 7F64           MOV    R7,#064H
+02E1 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 237 
+02E4 C2B2           CLR    dataA
+                                           ; SOURCE LINE # 238 
+02E6 D2B3           SETB   dataB
+                                           ; SOURCE LINE # 239 
+02E8 D2B4           SETB   dataC
+                                           ; SOURCE LINE # 240 
+02EA C2B5           CLR    dataD
+                                           ; SOURCE LINE # 241 
+02EC E4             CLR    A
+02ED FE             MOV    R6,A
+02EE 7F0A           MOV    R7,#00AH
+02F0 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 243 
+02F3 E500    R      MOV    A,guestScoreDigitTwo+01H
+02F5 2400    R      ADD    A,#SevenSegDigit
+02F7 F8             MOV    R0,A
+02F8 8690           MOV    P1,@R0
+                                           ; SOURCE LINE # 245 
+02FA C2B2           CLR    dataA
+                                           ; SOURCE LINE # 246 
+02FC C2B3           CLR    dataB
+                                           ; SOURCE LINE # 247 
+02FE D2B4           SETB   dataC
+                                           ; SOURCE LINE # 248 
+0300 C2B5           CLR    dataD
+                                           ; SOURCE LINE # 249 
+0302 E4             CLR    A
+0303 FE             MOV    R6,A
+0304 7F64           MOV    R7,#064H
+0306 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 254 
+0309 C2B2           CLR    dataA
+                                           ; SOURCE LINE # 255 
+030B D2B3           SETB   dataB
+                                           ; SOURCE LINE # 256 
+030D D2B4           SETB   dataC
+                                           ; SOURCE LINE # 257 
+030F C2B5           CLR    dataD
+                                           ; SOURCE LINE # 258 
+0311 E4             CLR    A
+0312 FE             MOV    R6,A
+0313 7F0A           MOV    R7,#00AH
+0315 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 260 
+0318 E500    R      MOV    A,guestScoreDigitThree+01H
+031A 2400    R      ADD    A,#SevenSegDigit
+031C F8             MOV    R0,A
+031D 8690           MOV    P1,@R0
+                                           ; SOURCE LINE # 262 
+031F D2B2           SETB   dataA
+                                           ; SOURCE LINE # 263 
+0321 C2B3           CLR    dataB
+                                           ; SOURCE LINE # 264 
+0323 D2B4           SETB   dataC
+                                           ; SOURCE LINE # 265 
+0325 C2B5           CLR    dataD
+                                           ; SOURCE LINE # 266 
+0327 E4             CLR    A
+0328 FE             MOV    R6,A
+0329 7F64           MOV    R7,#064H
+032B 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 275 
+032E C2B2           CLR    dataA
+                                           ; SOURCE LINE # 276 
+0330 D2B3           SETB   dataB
+                                           ; SOURCE LINE # 277 
+0332 D2B4           SETB   dataC
+                                           ; SOURCE LINE # 278 
+0334 C2B5           CLR    dataD
+                                           ; SOURCE LINE # 279 
+0336 E4             CLR    A
+0337 FE             MOV    R6,A
+0338 7F0A           MOV    R7,#00AH
+033A 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 281 
+033D E500    R      MOV    A,shotClockDigitOne+01H
+033F 2400    R      ADD    A,#SevenSegDigit
+0341 F8             MOV    R0,A
+0342 8690           MOV    P1,@R0
+                                           ; SOURCE LINE # 283 
+0344 D2B2           SETB   dataA
+                                           ; SOURCE LINE # 284 
+0346 D2B3           SETB   dataB
+                                           ; SOURCE LINE # 285 
+0348 D2B4           SETB   dataC
+                                           ; SOURCE LINE # 286 
+034A C2B5           CLR    dataD
+                                           ; SOURCE LINE # 287 
+034C E4             CLR    A
+034D FE             MOV    R6,A
+034E 7F64           MOV    R7,#064H
+0350 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 292 
+0353 C2B2           CLR    dataA
+                                           ; SOURCE LINE # 293 
+0355 D2B3           SETB   dataB
+                                           ; SOURCE LINE # 294 
+0357 D2B4           SETB   dataC
+                                           ; SOURCE LINE # 295 
+0359 C2B5           CLR    dataD
+                                           ; SOURCE LINE # 296 
+035B E4             CLR    A
+035C FE             MOV    R6,A
+035D 7F0A           MOV    R7,#00AH
+035F 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 298 
+0362 E500    R      MOV    A,shotClockDigitTwo+01H
+0364 2400    R      ADD    A,#SevenSegDigit
+0366 F8             MOV    R0,A
+0367 8690           MOV    P1,@R0
+                                           ; SOURCE LINE # 300 
+0369 C2B2           CLR    dataA
+                                           ; SOURCE LINE # 301 
+036B C2B3           CLR    dataB
+                                           ; SOURCE LINE # 302 
+036D C2B4           CLR    dataC
+                                           ; SOURCE LINE # 303 
+036F D2B5           SETB   dataD
+                                           ; SOURCE LINE # 304 
+0371 E4             CLR    A
+0372 FE             MOV    R6,A
+0373 7F64           MOV    R7,#064H
+0375 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 313 
+0378 C2B2           CLR    dataA
+                                           ; SOURCE LINE # 314 
+037A D2B3           SETB   dataB
+                                           ; SOURCE LINE # 315 
+037C D2B4           SETB   dataC
+                                           ; SOURCE LINE # 316 
+037E C2B5           CLR    dataD
+                                           ; SOURCE LINE # 317 
+0380 E4             CLR    A
+0381 FE             MOV    R6,A
+0382 7F0A           MOV    R7,#00AH
+0384 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 319 
+0387 E500    R      MOV    A,gameClockDigitOne+01H
+0389 2400    R      ADD    A,#SevenSegDigit
+038B F8             MOV    R0,A
+038C 8690           MOV    P1,@R0
+                                           ; SOURCE LINE # 321 
+038E D2B2           SETB   dataA
+                                           ; SOURCE LINE # 322 
+0390 C2B3           CLR    dataB
+                                           ; SOURCE LINE # 323 
+0392 C2B4           CLR    dataC
+                                           ; SOURCE LINE # 324 
+0394 D2B5           SETB   dataD
+                                           ; SOURCE LINE # 325 
+0396 E4             CLR    A
+0397 FE             MOV    R6,A
+0398 7F64           MOV    R7,#064H
+039A 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 329 
+039D C2B2           CLR    dataA
+                                           ; SOURCE LINE # 330 
+039F D2B3           SETB   dataB
+                                           ; SOURCE LINE # 331 
+03A1 D2B4           SETB   dataC
+                                           ; SOURCE LINE # 332 
+03A3 C2B5           CLR    dataD
+                                           ; SOURCE LINE # 333 
+03A5 E4             CLR    A
+03A6 FE             MOV    R6,A
+03A7 7F0A           MOV    R7,#00AH
+03A9 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 335 
+03AC E500    R      MOV    A,gameClockDigitTwo+01H
+03AE 2400    R      ADD    A,#SevenSegDigit
+03B0 F8             MOV    R0,A
+03B1 8690           MOV    P1,@R0
+                                           ; SOURCE LINE # 337 
+03B3 C2B2           CLR    dataA
+                                           ; SOURCE LINE # 338 
+03B5 D2B3           SETB   dataB
+                                           ; SOURCE LINE # 339 
+03B7 C2B4           CLR    dataC
+                                           ; SOURCE LINE # 340 
+03B9 D2B5           SETB   dataD
+                                           ; SOURCE LINE # 341 
+03BB E4             CLR    A
+03BC FE             MOV    R6,A
+03BD 7F64           MOV    R7,#064H
+03BF 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 346 
+03C2 C2B2           CLR    dataA
+                                           ; SOURCE LINE # 347 
+03C4 D2B3           SETB   dataB
+                                           ; SOURCE LINE # 348 
+03C6 D2B4           SETB   dataC
+                                           ; SOURCE LINE # 349 
+03C8 C2B5           CLR    dataD
+                                           ; SOURCE LINE # 350 
+03CA E4             CLR    A
+03CB FE             MOV    R6,A
+03CC 7F0A           MOV    R7,#00AH
+03CE 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 352 
+03D1 E500    R      MOV    A,gameClockDigitThree+01H
+03D3 2400    R      ADD    A,#SevenSegDigit
+03D5 F8             MOV    R0,A
+03D6 8690           MOV    P1,@R0
+                                           ; SOURCE LINE # 354 
+03D8 D2B2           SETB   dataA
+                                           ; SOURCE LINE # 355 
+03DA D2B3           SETB   dataB
+                                           ; SOURCE LINE # 356 
+03DC C2B4           CLR    dataC
+                                           ; SOURCE LINE # 357 
+03DE D2B5           SETB   dataD
+                                           ; SOURCE LINE # 358 
+03E0 E4             CLR    A
+03E1 FE             MOV    R6,A
+03E2 7F64           MOV    R7,#064H
+03E4 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 363 
+03E7 C2B2           CLR    dataA
+                                           ; SOURCE LINE # 364 
+03E9 D2B3           SETB   dataB
+                                           ; SOURCE LINE # 365 
+03EB D2B4           SETB   dataC
+                                           ; SOURCE LINE # 366 
+03ED C2B5           CLR    dataD
+                                           ; SOURCE LINE # 367 
+03EF E4             CLR    A
+03F0 FE             MOV    R6,A
+03F1 7F0A           MOV    R7,#00AH
+03F3 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 369 
+03F6 E500    R      MOV    A,gameClockDigitFour+01H
+03F8 2400    R      ADD    A,#SevenSegDigit
+03FA F8             MOV    R0,A
+03FB 8690           MOV    P1,@R0
+                                           ; SOURCE LINE # 371 
+03FD C2B2           CLR    dataA
+                                           ; SOURCE LINE # 372 
+03FF C2B3           CLR    dataB
+                                           ; SOURCE LINE # 373 
+0401 D2B4           SETB   dataC
+                                           ; SOURCE LINE # 374 
+0403 D2B5           SETB   dataD
+                                           ; SOURCE LINE # 375 
+0405 E4             CLR    A
+0406 FE             MOV    R6,A
+0407 7F64           MOV    R7,#064H
+0409 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 383 
+040C C2B2           CLR    dataA
+                                           ; SOURCE LINE # 384 
+040E D2B3           SETB   dataB
+                                           ; SOURCE LINE # 385 
+0410 D2B4           SETB   dataC
+                                           ; SOURCE LINE # 386 
+0412 C2B5           CLR    dataD
+                                           ; SOURCE LINE # 387 
+0414 E4             CLR    A
+0415 FE             MOV    R6,A
+0416 7F0A           MOV    R7,#00AH
+0418 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 389 
+041B E500    R      MOV    A,quarter+01H
+041D 2400    R      ADD    A,#SevenSegDigit
+041F F8             MOV    R0,A
+0420 8690           MOV    P1,@R0
+                                           ; SOURCE LINE # 391 
+0422 D2B2           SETB   dataA
+                                           ; SOURCE LINE # 392 
+0424 C2B3           CLR    dataB
+                                           ; SOURCE LINE # 393 
+0426 D2B4           SETB   dataC
+                                           ; SOURCE LINE # 394 
+0428 D2B5           SETB   dataD
+                                           ; SOURCE LINE # 395 
+042A E4             CLR    A
+042B FE             MOV    R6,A
+042C 7F64           MOV    R7,#064H
+042E 120000  R      LCALL  _delay
+                                           ; SOURCE LINE # 402 
+0431 E500    R      MOV    A,pause
+0433 4500    R      ORL    A,pause+01H
+0435 702E           JNZ    ?NXT27
+                                           ; SOURCE LINE # 403 
+0437 C000    R      PUSH   shotClock
+0439 C000    R      PUSH   shotClock+01H
+043B C000    R      PUSH   shotClock+02H
+043D C000    R      PUSH   shotClock+03H
+043F E4             CLR    A
+0440 FF             MOV    R7,A
+0441 FE             MOV    R6,A
+0442 FC             MOV    R4,A
+0443 FD             MOV    R5,A
+0444 120000  R      LCALL  ?COMPIEEE
+0447 BF011B         CJNE   R7,#001H,?NXT27
+                                           ; SOURCE LINE # 404 
+044A C000    R      PUSH   shotClock
+044C C000    R      PUSH   shotClock+01H
+044E C000    R      PUSH   shotClock+02H
+0450 C000    R      PUSH   shotClock+03H
+0452 7CEC           MOV    R4,#0ECH
+0454 7D51           MOV    R5,#051H
+0456 7EB8           MOV    R6,#0B8H
+0458 7F3D           MOV    R7,#03DH
+045A 120000  R      LCALL  ?SUBBIEEE
+045D 8C00    R      MOV    shotClock,R4
+045F 8D00    R      MOV    shotClock+01H,R5
+0461 8E00    R      MOV    shotClock+02H,R6
+0463 8F00    R      MOV    shotClock+03H,R7
+0465         ?NXT27:
+                                           ; SOURCE LINE # 408 
+0465 E500    R      MOV    A,pause
+0467 4500    R      ORL    A,pause+01H
+0469 6003           JZ     $ + 5
+046B 020000  R      LJMP   ?WHILE3
+                                           ; SOURCE LINE # 409 
+046E C000    R      PUSH   gameClock
+0470 C000    R      PUSH   gameClock+01H
+0472 C000    R      PUSH   gameClock+02H
+0474 C000    R      PUSH   gameClock+03H
+0476 E4             CLR    A
+0477 FC             MOV    R4,A
+0478 FD             MOV    R5,A
+0479 FE             MOV    R6,A
+047A FF             MOV    R7,A
+047B 120000  R      LCALL  ?COMPIEEE
+047E BF0102         CJNE   R7,#001H,$ + 5
+0481 8003           SJMP   $ + 5
+0483 020000  R      LJMP   ?WHILE3
+                                           ; SOURCE LINE # 410 
+0486 E500    R      MOV    A,gameClockDigitTwo
+0488 4500    R      ORL    A,gameClockDigitTwo+01H
+048A 7020           JNZ    ?NXT31
+048C E500    R      MOV    A,gameClockDigitOne
+048E 4500    R      ORL    A,gameClockDigitOne+01H
+0490 701A           JNZ    ?NXT31
+                                           ; SOURCE LINE # 411 
+0492 C000    R      PUSH   gameClock
+0494 C000    R      PUSH   gameClock+01H
+0496 C000    R      PUSH   gameClock+02H
+0498 C000    R      PUSH   gameClock+03H
+049A E4             CLR    A
+049B FC             MOV    R4,A
+049C FD             MOV    R5,A
+049D 7E20           MOV    R6,#020H
+049F 7F42           MOV    R7,#042H
+04A1 120000  R      LCALL  ?SUBBIEEE
+04A4 8C00    R      MOV    gameClock,R4
+04A6 8D00    R      MOV    gameClock+01H,R5
+04A8 8E00    R      MOV    gameClock+02H,R6
+04AA 8F00    R      MOV    gameClock+03H,R7
+04AC         ?NXT31:
+                                           ; SOURCE LINE # 413 
+04AC C000    R      PUSH   gameClock
+04AE C000    R      PUSH   gameClock+01H
+04B0 C000    R      PUSH   gameClock+02H
+04B2 C000    R      PUSH   gameClock+03H
+04B4 7CEC           MOV    R4,#0ECH
+04B6 7D51           MOV    R5,#051H
+04B8 7EB8           MOV    R6,#0B8H
+04BA 7F3D           MOV    R7,#03DH
+04BC 120000  R      LCALL  ?SUBBIEEE
+04BF 8C00    R      MOV    gameClock,R4
+04C1 8D00    R      MOV    gameClock+01H,R5
+04C3 8E00    R      MOV    gameClock+02H,R6
+04C5 8F00    R      MOV    gameClock+03H,R7
+04C7 020000  R      LJMP   ?WHILE3
+
+            ; FUNCTION main (END)
+
+RC51 COMPILER V03.03.42,  MAINCODE1               08/05/21  13:32:27  PAGE  3
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+delay. . . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+  n?061. . . . . . . . . . . . . . . .  PARAM   DATA    INT     0000H   2    
+  n?061. . . . . . . . . . . . . . . .  PARAM   DATA    INT     0000H   2    
+main . . . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+shotClockTimer?085 . . . . . . . . . .  AUTO    DATA    INT     0022H   2    
+gameClockTimer?087 . . . . . . . . . .  AUTO    DATA    INT     0024H   2    
+shotClockDigitOne?089. . . . . . . . .  AUTO    DATA    INT     0030H   2    
+v?091. . . . . . . . . . . . . . . . .  AUTO    DATA    INT     0026H   2    
+shotClockDigitTwo?093. . . . . . . . .  AUTO    DATA    INT     0032H   2    
+gameClockDigitOne?095. . . . . . . . .  AUTO    DATA    INT     0034H   2    
+o?097. . . . . . . . . . . . . . . . .  AUTO    DATA    INT     0028H   2    
+gameClockDigitTwo?099. . . . . . . . .  AUTO    DATA    INT     0036H   2    
+p?101. . . . . . . . . . . . . . . . .  AUTO    DATA    INT     002AH   2    
+gameClockDigitThree?103. . . . . . . .  AUTO    DATA    INT     0038H   2    
+gameClockDigitFour?105 . . . . . . . .  AUTO    DATA    INT     003AH   2    
+homeScoreDigitOne?107. . . . . . . . .  AUTO    DATA    INT     003CH   2    
+n?109. . . . . . . . . . . . . . . . .  AUTO    DATA    INT     002CH   2    
+homeScoreDigitTwo?111. . . . . . . . .  AUTO    DATA    INT     003EH   2    
+homeScoreDigitThree?113. . . . . . . .  AUTO    DATA    INT     0040H   2    
+guestScoreDigitOne?115 . . . . . . . .  AUTO    DATA    INT     0042H   2    
+y?117. . . . . . . . . . . . . . . . .  AUTO    DATA    INT     002EH   2    
+guestScoreDigitTwo?119 . . . . . . . .  AUTO    DATA    INT     0044H   2    
+guestScoreDigitThree?121 . . . . . . .  AUTO    DATA    INT     0046H   2    
+SevenSegDigit?063. . . . . . . . . . .  AUTO    DATA    ARRAY   000CH   10   
+homeScore?065. . . . . . . . . . . . .  AUTO    DATA    INT     0000H   2    
+homeScoring?067. . . . . . . . . . . .  AUTO    DATA    INT     0016H   2    
+guestScore?069 . . . . . . . . . . . .  AUTO    DATA    INT     0002H   2    
+guestScoring?071 . . . . . . . . . . .  AUTO    DATA    INT     0018H   2    
+shotClock?073. . . . . . . . . . . . .  AUTO    DATA    FLOAT   0004H   4    
+gameClock?075. . . . . . . . . . . . .  AUTO    DATA    FLOAT   0008H   4    
+quarter?077. . . . . . . . . . . . . .  AUTO    DATA    INT     001AH   2    
+pause?079. . . . . . . . . . . . . . .  AUTO    DATA    INT     001CH   2    
+pausing?081. . . . . . . . . . . . . .  AUTO    DATA    INT     001EH   2    
+adding?083 . . . . . . . . . . . . . .  AUTO    DATA    INT     0020H   2    
+RC51 COMPILER V03.03.42,  MAINCODE1               08/05/21  13:32:27  PAGE  4
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1240    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      72
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+RC51 COMPILATION COMPLETE.  0 WARNING,  0 ERROR

@@ -1,0 +1,232 @@
+LX51 CODE BANKING LINKER/LOCATOR V05.01.28                                     08/05/21  10:40:16
+WIN32 LX51 CODE BANKING LINKER/LOCATOR V05.01.28,  INVOKED BY:
+LX51 "c:\users\berna\documents\ssct 2020 - 2021\ojt\requirements\ojt requirements 1\c language co&
+de\at89c2051 gate system.OBJ" , "c:\users\berna\documents\ssct 2020 - 2021\ojt\requirements\ojt r&
+equirements 1\c language code\at89c2051 gate system.DTP" TO("c:\users\berna\documents\ssct 2020 -&
+ 2021\ojt\requirements\ojt requirements 1\c language code\at89c2051 gate system.AOF") PR("c:\user&
+s\berna\documents\ssct 2020 - 2021\ojt\requirements\ojt requirements 1\c language code\at89c2051 &
+gate system.m51") XSIZE(65536) CSIZE(65536) RS(256) RSI(128) IX MAP 
+
+
+MEMORY MODEL: SMALL WITHOUT ANY FLOATING POINT ARITHMETIC
+
+
+INPUT MODULES INCLUDED
+  C:\USERS\BERNA\DOCUMENTS\SSCT 2020 - 2021\OJT\REQUIREMENTS\OJT REQUIREMENTS 1\C LANGUAGE CODE\A&
+T89C2051 GATE SYSTEM.OBJ(AT89C2051 GATE SYSTEM)
+  C:\USERS\BERNA\DOCUMENTS\SSCT 2020 - 2021\OJT\REQUIREMENTS\OJT REQUIREMENTS 1\C LANGUAGE CODE\A&
+T89C2051 GATE SYSTEM.DTP(_WKRDTP_)
+  c:\RIDE\Lib\RC51S.LIB(C3SES)
+  c:\RIDE\Lib\RC51S.LIB(_C_STKX)
+  c:\RIDE\Lib\RC51S.LIB(HPD)
+  c:\RIDE\Lib\RC51S.LIB(_C_IDATALEN)
+
+
+LINK MAP OF MODULE: C:\USERS\BERNA\DOCUMENTS\SSCT 2020 - 2021\OJT\REQUIREMENTS\OJT REQUIREMENTS 1&
+\C LANGUAGE CODE\AT89C2051 GATE SYSTEM.AOF (AT89C2051 GATE SYSTEM)
+
+    TYPE     BASE       LENGTH    RELOCATION     SEGMENT NAME
+    ----     ----       ------    ----------     ------------
+
+    * * * * * * *   DATA/IDATA    M E M O R Y   * * * * * * *
+    REG      0000H      0008H     ABSOLUTE       "REG BANK 0"
+    DATA     0008H      0001H     UNIT           ?C_SPX
+    IDATA    0009H      0001H     * * STACK * *  _STACK
+
+    * * * * * * *   PDATA/XDATA   M E M O R Y   * * * * * * *
+    PDATA    0000H      0100H     INPAGE         ?C_XSTACK
+
+    * * * * * * *   CODE          M E M O R Y   * * * * * * *
+    CODE     0000H      0003H     ABSOLUTE       
+    CODE     0003H      0012H     UNIT           ?PR?C51_STARTUP?
+    CODE     0015H      0011H     UNIT           ?PR?init?AT89C2051_GATE_SYSTEM
+    CODE     0026H      001BH     UNIT           ?PR?_delay?AT89C2051_GATE_SYSTEM
+    CODE     0041H      0011H     UNIT           ?PR?_servo_angle?AT89C2051_GATE_SYSTEM
+    CODE     0052H      0059H     UNIT           ?PR?main?AT89C2051_GATE_SYSTEM
+
+EXECUTABLE SUMMARY:
+-------------------
+    Total INTERNAL RAM storage requirement:  0009H (9)
+    Total EXTERNAL RAM storage requirement:  0100H (256)
+    Total     CODE     storage requirement:  00ABH (171)
+Note:  Summary does not include dynamic stack requirements
+
+
+REFERENCE MAP OF MODULE: C:\USERS\BERNA\DOCUMENTS\SSCT 2020 - 2021\OJT\REQUIREMENTS\OJT REQUIREMENTS 1\C LANGUAGE &
+CODE\AT89C2051 GATE SYSTEM.AOF (AT89C2051 GATE SYSTEM)
+
+SEGMENT                           BI_GROUP            DT_GROUP             ID_GROUP             XD_GROUP
+  +--> CALLED SEGMENT          START    LENGTH     START    LENGTH     START    LENGTH     START    LENGTH
+--------------------------------------------------------------------------------------
+
+SYMBOL TABLE FOR C:\USERS\BERNA\DOCUMENTS\SSCT 2020 - 2021\OJT\REQUIREMENTS\OJT REQUIREMENTS 1\C &
+LANGUAGE CODE\AT89C2051 GATE SYSTEM.AOF(AT89C2051 GATE SYSTEM)
+-------------------------------------------------------------------------------------------------&
+---------------------------------------------------------------
+
+    VALUE              TYPE               NAME
+    -----              ----               ----
+
+	-------            MODULE             at89c2051 gate system
+	C:0000H            SYMBOL             _ICE_DUMMY_
+	C:0052H            PUBLIC             main
+	C:0041H            PUBLIC             _servo_angle
+	C:0026H            PUBLIC             _delay
+	C:0015H            PUBLIC             init
+	B:00B1H            SYMBOL             sensor
+	B:00B0H            SYMBOL             servo_pin
+	B:00B5H            SYMBOL             button_4
+	B:00B4H            SYMBOL             button_3
+	B:00B3H            SYMBOL             button_2
+	B:00B2H            SYMBOL             button_1
+	B:0093H            SYMBOL             LED_4
+	B:0092H            SYMBOL             LED_3
+	B:0091H            SYMBOL             LED_2
+	B:0090H            SYMBOL             LED_1
+	B:0098H            SYMBOL             RI
+	B:0099H            SYMBOL             TI
+	B:009AH            SYMBOL             RB8
+	B:009BH            SYMBOL             TB8
+	B:009CH            SYMBOL             REN
+	B:009DH            SYMBOL             SM2
+	B:009EH            SYMBOL             SM1
+	B:009FH            SYMBOL             SM0
+	B:00B0H            SYMBOL             RXD
+	B:00B1H            SYMBOL             TXD
+	B:00B2H            SYMBOL             INT0
+	B:00B3H            SYMBOL             INT1
+	B:00B4H            SYMBOL             T0
+	B:00B5H            SYMBOL             T1
+	B:00B6H            SYMBOL             WR
+	B:00B7H            SYMBOL             RD
+	B:00B8H            SYMBOL             PX0
+	B:00B9H            SYMBOL             PT0
+	B:00BAH            SYMBOL             PX1
+	B:00BBH            SYMBOL             PT1
+	B:00BCH            SYMBOL             PS
+	B:00A8H            SYMBOL             EX0
+	B:00A9H            SYMBOL             ET0
+	B:00AAH            SYMBOL             EX1
+	B:00ABH            SYMBOL             ET1
+	B:00ACH            SYMBOL             ES
+	B:00AFH            SYMBOL             EA
+	B:0088H            SYMBOL             IT0
+	B:0089H            SYMBOL             IE0
+	B:008AH            SYMBOL             IT1
+	B:008BH            SYMBOL             IE1
+	B:008CH            SYMBOL             TR0
+	B:008DH            SYMBOL             TF0
+	B:008EH            SYMBOL             TR1
+	B:008FH            SYMBOL             TF1
+	B:00D0H            SYMBOL             P
+	B:00D2H            SYMBOL             OV
+	B:00D3H            SYMBOL             RS0
+	B:00D4H            SYMBOL             RS1
+	B:00D5H            SYMBOL             F0
+	B:00D6H            SYMBOL             AC
+	B:00D7H            SYMBOL             CY
+	D:0099H            SYMBOL             SBUF
+	D:0098H            SYMBOL             SCON
+	D:00B8H            SYMBOL             IP
+	D:00A8H            SYMBOL             IE
+	D:008DH            SYMBOL             TH1
+	D:008CH            SYMBOL             TH0
+	D:008BH            SYMBOL             TL1
+	D:008AH            SYMBOL             TL0
+	D:0089H            SYMBOL             TMOD
+	D:0088H            SYMBOL             TCON
+	D:0087H            SYMBOL             PCON
+	D:0083H            SYMBOL             DPH
+	D:0082H            SYMBOL             DPL
+	D:0081H            SYMBOL             SP
+	D:00F0H            SYMBOL             B
+	D:00E0H            SYMBOL             ACC
+	D:00D0H            SYMBOL             PSW
+	D:00B0H            SYMBOL             P3
+	D:00A0H            SYMBOL             P2
+	D:0090H            SYMBOL             P1
+	D:0080H            SYMBOL             P0
+	D:0081H            SYMBOL             __SP__
+	-------            PROC               init
+	C:0015H            LINE#              19
+	C:0015H            LINE#              19
+	C:0015H            LINE#              21
+	C:0018H            LINE#              22
+	C:001BH            LINE#              23
+	C:001DH            LINE#              24
+	C:001FH            LINE#              25
+	C:0021H            LINE#              26
+	C:0023H            LINE#              27
+	C:0025H            LINE#              28
+	C:0025H            LINE#              28
+	-------            ENDPROC            init
+	-------            PROC               _delay
+	C:0026H            LINE#              30
+	C:0026H            LINE#              30
+	C:0026H            LINE#              33
+	C:0040H            LINE#              34
+	C:0040H            LINE#              34
+	-------            ENDPROC            _delay
+	-------            PROC               _servo_angle
+	C:0041H            LINE#              36
+	C:0041H            LINE#              36
+	C:0041H            LINE#              38
+	C:004EH            LINE#              40
+	C:0051H            LINE#              42
+	C:0051H            LINE#              42
+	-------            ENDPROC            _servo_angle
+	-------            PROC               main
+	C:0052H            LINE#              44
+	C:0052H            LINE#              44
+	C:0052H            LINE#              46
+	C:0055H            LINE#              49
+	C:0057H            LINE#              52
+	C:0060H            LINE#              55
+	C:0062H            LINE#              56
+	C:0064H            LINE#              57
+	C:0066H            LINE#              58
+	C:0068H            LINE#              61
+	C:006AH            LINE#              62
+	C:0071H            LINE#              65
+	C:007AH            LINE#              67
+	C:007CH            LINE#              68
+	C:007EH            LINE#              69
+	C:0080H            LINE#              70
+	C:0082H            LINE#              72
+	C:0084H            LINE#              73
+	C:008BH            LINE#              75
+	C:0091H            LINE#              76
+	C:0093H            LINE#              77
+	C:0095H            LINE#              78
+	C:0097H            LINE#              79
+	C:0099H            LINE#              82
+	C:009CH            LINE#              84
+	C:009EH            LINE#              85
+	C:00A0H            LINE#              86
+	C:00A2H            LINE#              87
+	C:00A4H            LINE#              91
+	C:00A7H            LINE#              93
+	C:00A9H            LINE#              97
+	-------            ENDPROC            main
+	-------            ENDMOD             at89c2051 gate system
+	N:00E8H            PUBLIC             TIM1_INIT
+	N:0010H            PUBLIC             SIZEBUFPRINTF
+	N:0100H            PUBLIC             XSTACKLEN
+	N:0001H            PUBLIC             _EXTSTK_DUMMY_
+	C:0003H            PUBLIC             ?C_STARTES3
+	X:0000H            PUBLIC             _XSTK0
+	D:0008H            PUBLIC             SPX
+	-------            MODULE             _C_STKX
+	X:0000H            PUBLIC             _XSTK0
+	D:0008H            PUBLIC             SPX
+	-------            ENDMOD             _C_STKX
+	D:00A0H            PUBLIC             HPD_ADDR
+	N:007FH            PUBLIC             IDATALEN
+	N:0000H            PUBLIC             _INITP2?
+
+UNCALLED SEGMENTS:
+------------------
+    ?PR?_delay?AT89C2051_GATE_SYSTEM
+
+LINK/LOCATE RUN COMPLETE,  NO ERROR FOUND.
+

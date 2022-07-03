@@ -1,0 +1,49 @@
+WIN32 LX51 CODE BANKING LINKER/LOCATOR V05.01.28
+
+
+INTER-MODULE CROSS-REFERENCE LISTING
+------------------------------------
+
+          NAME. . . . . . . . USAGE   MODULE NAMES
+          ----------------------------------------
+          ?ADDIEEE  . . . . . CODE    [ADSUIEEE]: 
+          ?ADDIEEEX . . . . . CODE    [ADSUIEEE]: 
+          ?CAST_IEEE  . . . . CODE    [CONVIEEE]: 
+          ?COMPIEEE . . . . . CODE    [COMPIEEE]:  MAINCODE1
+          ?CV_CHAR_IEEE . . . CODE    [CONVIEEE]: 
+          ?CV_IEEE_LS . . . . CODE    [CONVIEEE]:  MAINCODE1
+          ?CV_IEEE_LU . . . . CODE    [CONVIEEE]: 
+          ?CV_LS_IEEE . . . . CODE    [CONVIEEE]: 
+          ?CV_LU_IEEE . . . . CODE    [CONVIEEE]: 
+          ?C_CPY  . . . . . . CODE    [STRCPY]:  MAINCODE1
+          ?C_SIDIV  . . . . . CODE    [DIVS]:  MAINCODE1
+          ?C_STARTES3 . . . . CODE    [C3SES]:  MAINCODE1
+          ?C_UIDIV  . . . . . CODE    [DIVS]: 
+          ?strcpy . . . . . . CODE    [STRCPY]: 
+          ?SUBBIEEE . . . . . CODE    [ADSUIEEE]:  MAINCODE1
+          ?SUBBIEEEX  . . . . CODE    [ADSUIEEE]: 
+          CPL_R4R5  . . . . . CODE    [DIVS]: 
+          CPL_R6R7  . . . . . CODE    [DIVS]: 
+          DIV_2 . . . . . . . CODE    [DIVS]: 
+          HPD_ADDR  . . . . . DATA    [HPD]:  C3SES
+          IDATALEN  . . . . . NUMBER  [_C_IDATALEN]:  C3SES
+          main  . . . . . . . CODE    [MAINCODE1]:  C3SES
+          MV4_XD2RG?C . . . . CODE    [MV_XD2RG4]:  ADSUIEEE
+          SIZEBUFPRINTF . . . NUMBER  [_WKRDTP_]: 
+          SPX . . . . . . . . DATA    [_C_STKX]:  C3SES
+          TIM1_INIT . . . . . NUMBER  [_WKRDTP_]: 
+          XSTACKLEN . . . . . NUMBER  [_WKRDTP_]: 
+          _delay  . . . . . . CODE    [MAINCODE1]: 
+          _END_OP_IEEE?C  . . CODE    [TOOLIEEE]:  COMPIEEE, ADSUIEEE
+          _EXTSTK_DUMMY_  . . NUMBER  [_WKRDTP_]: 
+          _INITP2?  . . . . . NUMBER  [_C_IDATALEN]: 
+          _STACK  . . . . . . IDATA   [MAINCODE1]:  C3SES
+          _XSTK0  . . . . . . XDATA   [_C_STKX]:  C3SES
+          __IEEE_END_RESULT__ CODE    [TOOLIEEE]:  ADSUIEEE
+          __IEEE_GET_EXP_SET_MCODE    [TOOLIEEE]:  ADSUIEEE
+          __IEEE_RESULT_NULL__CODE    [TOOLIEEE]:  ADSUIEEE
+          __IEEE_TRAP_DEB__ . CODE    [TOOLIEEE]:  ADSUIEEE
+          __IEEE_TRAP_NAN__ . CODE    [TOOLIEEE]:  ADSUIEEE
+          __LOCAL_END__ . . . CODE    [SHARING]:  STRCPY
+          __NULL_POINTER__  . CODE    [SHARING]:  STRCPY
+          __STRCPY_NXT1__ . . CODE    [STRCPY]: 

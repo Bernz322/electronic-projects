@@ -1,0 +1,298 @@
+RC51 COMPILER V03.03.42,  AT89C2051_GATE_SYSTEM    08/05/21  10:40:16  PAGE  1
+
+QCW(0x00002F32)
+
+WIN32 RC51 COMPILER V03.03.42, COMPILATION OF MODULE AT89C2051_GATE_SYSTEM
+OBJECT MODULE PLACED IN c:\users\berna\documents\ssct 2020 - 2021\ojt\requiremen
+            -ts\ojt requirements 1\c language code\at89c2051 gate system.obj
+COMPILER INVOKED BY: RC51.EXE C:\USERS\BERNA\DOCUMENTS\SSCT 2020 - 2021\OJT\REQU
+            -IREMENTS\OJT REQUIREMENTS 1\C LANGUAGE CODE\AT89C2051 GATE SYSTEM.C
+            - OBJECT(C:\USERS\BERNA\DOCUMENTS\SSCT 2020 - 2021\OJT\REQUIREMENTS\
+            -OJT REQUIREMENTS 1\C LANGUAGE CODE\AT89C2051 GATE SYSTEM.OBJ) PIN(C
+            -:\RIDE\INC;C:\RIDE\INC\51) PIN(C:\RIDE\INC\51\) NOAM PR(C:\USERS\BE
+            -RNA\DOCUMENTS\SSCT 2020 - 2021\OJT\REQUIREMENTS\OJT REQUIREMENTS 1\
+            -C LANGUAGE CODE\AT89C2051 GATE SYSTEM.LST) CD SB OE(1) SM FP(NOFLOA
+            -T) PW(80) NOIS UNSIGNEDCHAR ET(CHAR) 
+
+stmt level    source
+   1          #include<stdio.h>
+   2          #include<reg51.h>
+   3          #include <intrins.h>
+   4          
+   5          sbit LED_1 = P1^0;	// OPEN GATE LED Indicator
+   6          sbit LED_2 = P1^1;	// CLOSE GATE LED Indicator
+   7          sbit LED_3 = P1^2;	// STOP GATE LED Indicator
+   8          sbit LED_4 = P1^3;	// LOCK GATE LED Indicator (RED)
+   9          sbit button_1 = P3^2;	// OPEN GATE BTN
+  10          sbit button_2 = P3^3;	// CLOSE GATE BTN
+  11          sbit button_3 = P3^4;	// STOP GATE BTN
+  12          sbit button_4 = P3^5;	// LOCK GATE BTN
+  13          sbit servo_pin = P3^0;	// Servo as a gate
+  14          sbit sensor = P3^1;	// VIBRATION Sensor
+  15          
+  16          void init(void);
+  17          void delay(int sec);
+  18          
+  19          void init(void)
+  20          {
+  21   1        P1 = 0x00;
+  22   1        P3 = 0x00;
+  23   1        button_1 = 1;
+  24   1        button_2 = 1;
+  25   1        button_3 = 1;
+  26   1        button_4 = 1;
+  27   1        sensor = 1;
+  28   1      }
+  29          
+  30          void delay(int sec)
+  31          { 
+  32   1      	int i;
+  33   1      	for(i = 0; i < sec; i++);
+  34   1      }
+  35          
+  36          void servo_angle(unsigned int deg)
+  37          {
+  38   1        while(deg--)
+  39   1        {
+  40   2          _nop_();
+  41   2        }
+  42   1      }
+  43          
+  44          void main ( void )
+  45          {
+  46   1      	init();
+  47   1      	while(1)
+  48   1      	{
+  49   2      		servo_pin = 0;
+  50   2      		
+  51   2      		// If "OPEN" button is pressed AND "LOCK" is not pressed AND sen
+            -sor is in HIGH state
+  52   2      		if(button_1 == 0 && button_4 != 0 && sensor != 0)	// OPEN
+  53   2      		{
+  54   3      			// ON LED 1
+  55   3      			LED_1 = 1;
+  56   3      			LED_2 = 0;
+  57   3      			LED_3 = 0;
+  58   3      			LED_4 = 0;
+  59   3      			
+  60   3      			//Rotate servo to OPEN
+  61   3      			servo_pin=1;	
+  62   3      			servo_angle(95);
+  63   3      		}
+  64   2      		// If "CLOSE" button is pressed AND "LOCK" is not pressed AND se
+            -nsor is in HIGH state
+  65   2      		if (button_2 == 0 && button_4 != 0 && sensor != 0){	// CLOSE
+  66   3      			// ON LED 2
+  67   3      			LED_2 = 1;
+  68   3      			LED_1 = 0;
+  69   3      			LED_3 = 0;
+  70   3      			LED_4 = 0;
+  71   3      			//Rotate servo to CLOSE
+  72   3      			servo_pin = 1;
+  73   3      			servo_angle(50);
+  74   3      		} 
+  75   2      		if (button_3 == 0 && button_4 != 0){	// STOP
+  76   3      			LED_3 = 1;
+  77   3      			LED_1 = 0;
+  78   3      			LED_2 = 0;
+  79   3      			LED_4 = 0;	
+  80   3      		}
+  81   2      		
+  82   2      		if (button_4 == 0){	// LOCK both OPENING and CLOSING OF GATE
+  83   3      			// ON red LED indicating the locking of gate functionalities
+  84   3      			LED_4 = 1;
+  85   3      			LED_1 = 0;
+  86   3      			LED_2 = 0;
+  87   3      			LED_3 = 0;		
+  88   3      			// No button interaction
+  89   3      		}
+  90   2      		
+  91   2      		if (button_4 == 1){	// LOCK both OPENING and CLOSING OF GATE
+  92   3      			// ON red LED indicating the locking of gate functionalities
+  93   3      			LED_4 = 0;	
+  94   3      			// No button interaction
+  95   3      		}
+  96   2      	}
+  97   1      } 
+  98          
+RC51 COMPILER V03.03.42,  AT89C2051_GATE_SYSTEM    08/05/21  10:40:16  PAGE  2
+
+ASSEMBLY LISTING OF GENERATED OBJECT CODE
+
+            ; FUNCTION init (BEGIN)
+                                           ; SOURCE LINE # 21 
+0000 759000         MOV    P1,#000H
+                                           ; SOURCE LINE # 22 
+0003 75B000         MOV    P3,#000H
+                                           ; SOURCE LINE # 23 
+0006 D2B2           SETB   button_1
+                                           ; SOURCE LINE # 24 
+0008 D2B3           SETB   button_2
+                                           ; SOURCE LINE # 25 
+000A D2B4           SETB   button_3
+                                           ; SOURCE LINE # 26 
+000C D2B5           SETB   button_4
+                                           ; SOURCE LINE # 27 
+000E D2B1           SETB   sensor
+                                           ; SOURCE LINE # 28 
+0010 22             RET    
+
+            ; FUNCTION init (END)
+
+            ; FUNCTION _delay (BEGIN)
+              ; Register R6R7 is assigned to parameter sec
+              ; R2R3 is assigned to i
+                                           ; SOURCE LINE # 33 
+0000 E4             CLR    A
+0001 FA             MOV    R2,A
+0002 FB             MOV    R3,A
+0003         ?FOR1:
+0003 8EF0           MOV    B,R6
+0005 B2F7           CPL    B.7
+0007 EA             MOV    A,R2
+0008 6480           XRL    A,#080H
+000A B5F004         CJNE   A,B,?LAB6
+000D EB             MOV    A,R3
+000E B50700         CJNE   A,AR7,?LAB6
+0011         ?LAB6:
+0011 5007           JNC    ?NXT2
+0013 0B             INC    R3
+0014 EB             MOV    A,R3
+0015 70EC           JNZ    ?FOR1
+0017 0A             INC    R2
+0018 80E9           SJMP   ?FOR1
+001A         ?NXT2:
+                                           ; SOURCE LINE # 34 
+001A 22             RET    
+
+            ; FUNCTION _delay (END)
+
+            ; FUNCTION _servo_angle (BEGIN)
+              ; Register R6R7 is assigned to parameter deg
+0000         ?WHILE1:
+                                           ; SOURCE LINE # 38 
+0000 8E02           MOV    AR2,R6
+0002 8F03           MOV    AR3,R7
+0004 EF             MOV    A,R7
+0005 1F             DEC    R7
+0006 7001           JNZ    ?LAB12
+0008 1E             DEC    R6
+0009         ?LAB12:
+0009 EA             MOV    A,R2
+000A 4B             ORL    A,R3
+000B 6003           JZ     ?NXT5
+                                           ; SOURCE LINE # 40 
+000D 00             NOP    
+000E 80F0           SJMP   ?WHILE1
+0010         ?NXT5:
+                                           ; SOURCE LINE # 42 
+0010 22             RET    
+
+            ; FUNCTION _servo_angle (END)
+
+            ; FUNCTION main (BEGIN)
+                                           ; SOURCE LINE # 46 
+0000 120000  R      LCALL  init
+0003         ?WHILE3:
+                                           ; SOURCE LINE # 49 
+0003 C2B0           CLR    servo_pin
+                                           ; SOURCE LINE # 52 
+0005 20B217         JB     button_1,?NXT13
+0008 30B514         JNB    button_4,?NXT13
+000B 30B111         JNB    sensor,?NXT13
+                                           ; SOURCE LINE # 55 
+000E D290           SETB   LED_1
+                                           ; SOURCE LINE # 56 
+0010 C291           CLR    LED_2
+                                           ; SOURCE LINE # 57 
+0012 C292           CLR    LED_3
+                                           ; SOURCE LINE # 58 
+0014 C293           CLR    LED_4
+                                           ; SOURCE LINE # 61 
+0016 D2B0           SETB   servo_pin
+                                           ; SOURCE LINE # 62 
+0018 E4             CLR    A
+0019 FE             MOV    R6,A
+001A 7F5F           MOV    R7,#05FH
+001C 120000  R      LCALL  _servo_angle
+001F         ?NXT13:
+                                           ; SOURCE LINE # 65 
+001F 20B317         JB     button_2,?NXT14
+0022 30B514         JNB    button_4,?NXT14
+0025 30B111         JNB    sensor,?NXT14
+                                           ; SOURCE LINE # 67 
+0028 D291           SETB   LED_2
+                                           ; SOURCE LINE # 68 
+002A C290           CLR    LED_1
+                                           ; SOURCE LINE # 69 
+002C C292           CLR    LED_3
+                                           ; SOURCE LINE # 70 
+002E C293           CLR    LED_4
+                                           ; SOURCE LINE # 72 
+0030 D2B0           SETB   servo_pin
+                                           ; SOURCE LINE # 73 
+0032 E4             CLR    A
+0033 FE             MOV    R6,A
+0034 7F32           MOV    R7,#032H
+0036 120000  R      LCALL  _servo_angle
+0039         ?NXT14:
+                                           ; SOURCE LINE # 75 
+0039 20B40B         JB     button_3,?NXT15
+003C 30B508         JNB    button_4,?NXT15
+                                           ; SOURCE LINE # 76 
+003F D292           SETB   LED_3
+                                           ; SOURCE LINE # 77 
+0041 C290           CLR    LED_1
+                                           ; SOURCE LINE # 78 
+0043 C291           CLR    LED_2
+                                           ; SOURCE LINE # 79 
+0045 C293           CLR    LED_4
+0047         ?NXT15:
+                                           ; SOURCE LINE # 82 
+0047 20B508         JB     button_4,?NXT16
+                                           ; SOURCE LINE # 84 
+004A D293           SETB   LED_4
+                                           ; SOURCE LINE # 85 
+004C C290           CLR    LED_1
+                                           ; SOURCE LINE # 86 
+004E C291           CLR    LED_2
+                                           ; SOURCE LINE # 87 
+0050 C292           CLR    LED_3
+0052         ?NXT16:
+                                           ; SOURCE LINE # 91 
+0052 30B5AE         JNB    button_4,?WHILE3
+                                           ; SOURCE LINE # 93 
+0055 C293           CLR    LED_4
+0057 80AA           SJMP   ?WHILE3
+
+            ; FUNCTION main (END)
+
+RC51 COMPILER V03.03.42,  AT89C2051_GATE_SYSTEM    08/05/21  10:40:16  PAGE  3
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+init . . . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+delay. . . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+  sec?090. . . . . . . . . . . . . . .  PARAM   DATA    INT     0000H   2    
+  sec?090. . . . . . . . . . . . . . .  PARAM   DATA    INT     0000H   2    
+i?091. . . . . . . . . . . . . . . . .  AUTO    DATA    INT     0000H   2    
+servo_angle. . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+  deg?092. . . . . . . . . . . . . . .  PARAM   DATA    U_INT  0000H   2    
+  deg?092. . . . . . . . . . . . . . .  PARAM   DATA    U_INT  0000H   2    
+main . . . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+RC51 COMPILER V03.03.42,  AT89C2051_GATE_SYSTEM    08/05/21  10:40:16  PAGE  4
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    150    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+RC51 COMPILATION COMPLETE.  0 WARNING,  0 ERROR

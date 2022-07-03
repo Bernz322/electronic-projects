@@ -18,9 +18,9 @@
 
 <h3>ESP8266 (NodeMCU)</h3>
 
-| Name                                                      | Go to               |
-| --------------------------------------------------------- | ------------------- |
-| IoT-based Attendance System using RFID and SMS Capability | [Project](ESP8266/) |
+| Name                                                       | Go to               |
+| ---------------------------------------------------------- | ------------------- |
+| IoT-based Attendance System using RFID with SMS Capability | [Project](ESP8266/) |
 
 <h3>Raspberry Pi</h3>
 
@@ -29,5 +29,7 @@
 
 <h3>OJT</h3>
 
-| Name | Go to |
-| ---- | ----- |
+| Name                                             | Go to                                                                      |
+| ------------------------------------------------ | -------------------------------------------------------------------------- |
+| Basketball Scoreboard                            | [Project](AT89C2051-OJT/Basketball-Scoreboard/)                            |
+| Button and Vibration Sensor Operated Gate System | [Project](AT89C2051-OJT/Button-and-Vibration-Sensor-Operated-Gate-System/) |

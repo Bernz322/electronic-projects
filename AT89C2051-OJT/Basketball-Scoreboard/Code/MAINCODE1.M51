@@ -1,0 +1,457 @@
+LX51 CODE BANKING LINKER/LOCATOR V05.01.28                                     08/05/21  13:32:27
+WIN32 LX51 CODE BANKING LINKER/LOCATOR V05.01.28,  INVOKED BY:
+LX51 "c:\users\berna\documents\ssct 2020 - 2021\ojt\requirements\ojt requirements 2\c language co&
+de\maincode1.OBJ" , "c:\users\berna\documents\ssct 2020 - 2021\ojt\requirements\ojt requirements &
+2\c language code\maincode1.DTP" TO("c:\users\berna\documents\ssct 2020 - 2021\ojt\requirements\o&
+jt requirements 2\c language code\maincode1.AOF") PR("c:\users\berna\documents\ssct 2020 - 2021\o&
+jt\requirements\ojt requirements 2\c language code\maincode1.m51") XSIZE(65536) CSIZE(65536) RS(2&
+56) RSI(128) IX MAP 
+
+
+MEMORY MODEL: SMALL WITH IEEE STANDARD FLOATING POINT ARITHMETIC
+
+
+INPUT MODULES INCLUDED
+  C:\USERS\BERNA\DOCUMENTS\SSCT 2020 - 2021\OJT\REQUIREMENTS\OJT REQUIREMENTS 2\C LANGUAGE CODE\M&
+AINCODE1.OBJ(MAINCODE1)
+  C:\USERS\BERNA\DOCUMENTS\SSCT 2020 - 2021\OJT\REQUIREMENTS\OJT REQUIREMENTS 2\C LANGUAGE CODE\M&
+AINCODE1.DTP(_WKRDTP_)
+  c:\RIDE\Lib\RC51FPS.LIB(ADSUIEEE)
+  c:\RIDE\Lib\RC51FPS.LIB(TOOLIEEE)
+  c:\RIDE\Lib\RC51FPS.LIB(CONVIEEE)
+  c:\RIDE\Lib\RC51FPS.LIB(COMPIEEE)
+  c:\RIDE\Lib\RC51S.LIB(C3SES)
+  c:\RIDE\Lib\RC51S.LIB(MV_XD2RG4)
+  c:\RIDE\Lib\RC51S.LIB(DIVS)
+  c:\RIDE\Lib\RC51S.LIB(STRCPY)
+  c:\RIDE\Lib\RC51S.LIB(SHARING)
+  c:\RIDE\Lib\RC51S.LIB(_C_STKX)
+  c:\RIDE\Lib\RC51S.LIB(HPD)
+  c:\RIDE\Lib\RC51S.LIB(_C_IDATALEN)
+
+
+LINK MAP OF MODULE: C:\USERS\BERNA\DOCUMENTS\SSCT 2020 - 2021\OJT\REQUIREMENTS\OJT REQUIREMENTS 2&
+\C LANGUAGE CODE\MAINCODE1.AOF (MAINCODE1)
+
+    TYPE     BASE       LENGTH    RELOCATION     SEGMENT NAME
+    ----     ----       ------    ----------     ------------
+
+    * * * * * * *   DATA/IDATA    M E M O R Y   * * * * * * *
+    REG      0000H      0008H     ABSOLUTE       "REG BANK 0"
+    DATA     0008H      0048H     OVERLAID UNIT  _DGROUP00_
+             0008H      0048H     -------------  ?DT?main?MAINCODE1
+    DATA     0050H      0001H     UNIT           ?C_SPX
+    IDATA    0051H      0001H     * * STACK * *  _STACK
+
+    * * * * * * *   PDATA/XDATA   M E M O R Y   * * * * * * *
+    PDATA    0000H      0100H     INPAGE         ?C_XSTACK
+
+    * * * * * * *   CODE          M E M O R Y   * * * * * * *
+    CODE     0000H      0003H     ABSOLUTE       
+    CODE     0003H      000CH     INBLOCK        ?PR?MOVES?LIB51
+    CODE     000FH      0228H     UNIT           ?PR?LIB51
+    CODE     0237H      0012H     UNIT           ?PR?C51_STARTUP?
+    CODE     0249H      02BEH     UNIT           ?PR?IEEE?LIB51
+    CODE     0507H      000EH     UNIT           ?PR?_delay?MAINCODE1
+    CODE     0515H      000AH     UNIT           ?STR?MAINCODE1
+    CODE     051FH      04CAH     UNIT           ?PR?main?MAINCODE1
+
+EXECUTABLE SUMMARY:
+-------------------
+    Total INTERNAL RAM storage requirement:  0051H (81)
+    Total EXTERNAL RAM storage requirement:  0100H (256)
+    Total     CODE     storage requirement:  09E9H (2537)
+Note:  Summary does not include dynamic stack requirements
+
+
+REFERENCE MAP OF MODULE: C:\USERS\BERNA\DOCUMENTS\SSCT 2020 - 2021\OJT\REQUIREMENTS\OJT REQUIREMENTS 2\C LANGUAGE &
+CODE\MAINCODE1.AOF (MAINCODE1)
+
+SEGMENT                           BI_GROUP            DT_GROUP             ID_GROUP             XD_GROUP
+  +--> CALLED SEGMENT          START    LENGTH     START    LENGTH     START    LENGTH     START    LENGTH
+--------------------------------------------------------------------------------------
+
+?PR?main?MAINCODE1             ---------------     0008H    0048H      ---------------     ---------------
+  +--> ?PR?_delay?MAINCODE1
+
+?PR?_delay?MAINCODE1           ---------------     ---------------     ---------------     ---------------
+
+SYMBOL TABLE FOR C:\USERS\BERNA\DOCUMENTS\SSCT 2020 - 2021\OJT\REQUIREMENTS\OJT REQUIREMENTS 2\C &
+LANGUAGE CODE\MAINCODE1.AOF(MAINCODE1)
+-------------------------------------------------------------------------------------------------&
+---------------------------------------
+
+    VALUE              TYPE               NAME
+    -----              ----               ----
+
+	-------            MODULE             maincode1
+	C:0000H            SYMBOL             _ICE_DUMMY_
+	C:051FH            PUBLIC             main
+	C:0507H            PUBLIC             _delay
+	B:00B0H            SYMBOL             A2
+	B:00B1H            SYMBOL             A1
+	B:00B7H            SYMBOL             A0
+	B:00B5H            SYMBOL             dataD
+	B:00B4H            SYMBOL             dataC
+	B:00B3H            SYMBOL             dataB
+	B:00B2H            SYMBOL             dataA
+	B:0098H            SYMBOL             RI
+	B:0099H            SYMBOL             TI
+	B:009AH            SYMBOL             RB8
+	B:009BH            SYMBOL             TB8
+	B:009CH            SYMBOL             REN
+	B:009DH            SYMBOL             SM2
+	B:009EH            SYMBOL             SM1
+	B:009FH            SYMBOL             SM0
+	B:00B0H            SYMBOL             RXD
+	B:00B1H            SYMBOL             TXD
+	B:00B2H            SYMBOL             INT0
+	B:00B3H            SYMBOL             INT1
+	B:00B4H            SYMBOL             T0
+	B:00B5H            SYMBOL             T1
+	B:00B6H            SYMBOL             WR
+	B:00B7H            SYMBOL             RD
+	B:00B8H            SYMBOL             PX0
+	B:00B9H            SYMBOL             PT0
+	B:00BAH            SYMBOL             PX1
+	B:00BBH            SYMBOL             PT1
+	B:00BCH            SYMBOL             PS
+	B:00A8H            SYMBOL             EX0
+	B:00A9H            SYMBOL             ET0
+	B:00AAH            SYMBOL             EX1
+	B:00ABH            SYMBOL             ET1
+	B:00ACH            SYMBOL             ES
+	B:00AFH            SYMBOL             EA
+	B:0088H            SYMBOL             IT0
+	B:0089H            SYMBOL             IE0
+	B:008AH            SYMBOL             IT1
+	B:008BH            SYMBOL             IE1
+	B:008CH            SYMBOL             TR0
+	B:008DH            SYMBOL             TF0
+	B:008EH            SYMBOL             TR1
+	B:008FH            SYMBOL             TF1
+	B:00D0H            SYMBOL             P
+	B:00D2H            SYMBOL             OV
+	B:00D3H            SYMBOL             RS0
+	B:00D4H            SYMBOL             RS1
+	B:00D5H            SYMBOL             F0
+	B:00D6H            SYMBOL             AC
+	B:00D7H            SYMBOL             CY
+	D:0099H            SYMBOL             SBUF
+	D:0098H            SYMBOL             SCON
+	D:00B8H            SYMBOL             IP
+	D:00A8H            SYMBOL             IE
+	D:008DH            SYMBOL             TH1
+	D:008CH            SYMBOL             TH0
+	D:008BH            SYMBOL             TL1
+	D:008AH            SYMBOL             TL0
+	D:0089H            SYMBOL             TMOD
+	D:0088H            SYMBOL             TCON
+	D:0087H            SYMBOL             PCON
+	D:0083H            SYMBOL             DPH
+	D:0082H            SYMBOL             DPL
+	D:0081H            SYMBOL             SP
+	D:00F0H            SYMBOL             B
+	D:00E0H            SYMBOL             ACC
+	D:00D0H            SYMBOL             PSW
+	D:00B0H            SYMBOL             P3
+	D:00A0H            SYMBOL             P2
+	D:0090H            SYMBOL             P1
+	D:0080H            SYMBOL             P0
+	D:0081H            SYMBOL             __SP__
+	-------            PROC               _delay
+	C:0507H            LINE#              19
+	C:0507H            LINE#              19
+	C:0507H            LINE#              20
+	C:0514H            LINE#              21
+	C:0514H            LINE#              21
+	-------            ENDPROC            _delay
+	-------            PROC               main
+	D:0014H            SYMBOL             SevenSegDigit
+	D:0008H            SYMBOL             homeScore
+	D:001EH            SYMBOL             homeScoring
+	D:000AH            SYMBOL             guestScore
+	D:0020H            SYMBOL             guestScoring
+	D:000CH            SYMBOL             shotClock
+	D:0010H            SYMBOL             gameClock
+	D:0022H            SYMBOL             quarter
+	D:0024H            SYMBOL             pause
+	D:0026H            SYMBOL             pausing
+	D:0028H            SYMBOL             adding
+	C:051FH            LINE#              22
+	C:051FH            LINE#              22
+	C:051FH            LINE#              24
+	C:0530H            LINE#              29
+	C:0535H            LINE#              30
+	C:0539H            LINE#              33
+	C:053DH            LINE#              34
+	C:0541H            LINE#              37
+	C:054BH            LINE#              40
+	C:0555H            LINE#              43
+	C:055AH            LINE#              46
+	C:055EH            LINE#              47
+	C:0562H            LINE#              48
+	D:002AH            SYMBOL             shotClockTimer
+	D:002CH            SYMBOL             gameClockTimer
+	D:0038H            SYMBOL             shotClockDigitOne
+	D:002EH            SYMBOL             v
+	D:003AH            SYMBOL             shotClockDigitTwo
+	D:003CH            SYMBOL             gameClockDigitOne
+	D:0030H            SYMBOL             o
+	D:003EH            SYMBOL             gameClockDigitTwo
+	D:0032H            SYMBOL             p
+	D:0040H            SYMBOL             gameClockDigitThree
+	D:0042H            SYMBOL             gameClockDigitFour
+	D:0044H            SYMBOL             homeScoreDigitOne
+	D:0034H            SYMBOL             n
+	D:0046H            SYMBOL             homeScoreDigitTwo
+	D:0048H            SYMBOL             homeScoreDigitThree
+	D:004AH            SYMBOL             guestScoreDigitOne
+	D:0036H            SYMBOL             y
+	D:004CH            SYMBOL             guestScoreDigitTwo
+	D:004EH            SYMBOL             guestScoreDigitThree
+	C:0566H            LINE#              56
+	C:0575H            LINE#              57
+	C:0584H            LINE#              60
+	C:0593H            LINE#              61
+	C:05A2H            LINE#              62
+	C:05B1H            LINE#              65
+	C:05C0H            LINE#              66
+	C:05CFH            LINE#              67
+	C:05DEH            LINE#              68
+	C:05EDH            LINE#              69
+	C:05FCH            LINE#              70
+	C:060BH            LINE#              77
+	C:061AH            LINE#              78
+	C:0629H            LINE#              79
+	C:0638H            LINE#              80
+	C:0647H            LINE#              83
+	C:0656H            LINE#              84
+	C:0665H            LINE#              85
+	C:0674H            LINE#              86
+	C:0683H            LINE#              96
+	C:0692H            LINE#              97
+	C:069AH            LINE#              98
+	C:06A0H            LINE#              103
+	C:06AFH            LINE#              104
+	C:06B7H            LINE#              105
+	C:06BDH            LINE#              110
+	C:06C6H            LINE#              111
+	C:06D1H            LINE#              116
+	C:06DAH            LINE#              117
+	C:06E5H            LINE#              122
+	C:06F4H            LINE#              123
+	C:0702H            LINE#              124
+	C:070AH            LINE#              125
+	C:0712H            LINE#              127
+	C:0718H            LINE#              128
+	C:071DH            LINE#              135
+	C:072CH            LINE#              136
+	C:0732H            LINE#              137
+	C:073AH            LINE#              138
+	C:0742H            LINE#              140
+	C:074FH            LINE#              142
+	C:0755H            LINE#              148
+	C:075EH            LINE#              149
+	C:0763H            LINE#              150
+	C:0767H            LINE#              151
+	C:076BH            LINE#              152
+	C:076FH            LINE#              165
+	C:0771H            LINE#              166
+	C:0773H            LINE#              167
+	C:0775H            LINE#              168
+	C:0777H            LINE#              169
+	C:077EH            LINE#              171
+	C:0785H            LINE#              173
+	C:0787H            LINE#              174
+	C:0789H            LINE#              175
+	C:078BH            LINE#              176
+	C:078DH            LINE#              177
+	C:0794H            LINE#              182
+	C:0796H            LINE#              183
+	C:0798H            LINE#              184
+	C:079AH            LINE#              185
+	C:079CH            LINE#              186
+	C:07A3H            LINE#              188
+	C:07AAH            LINE#              190
+	C:07ACH            LINE#              191
+	C:07AEH            LINE#              192
+	C:07B0H            LINE#              193
+	C:07B2H            LINE#              194
+	C:07B9H            LINE#              199
+	C:07BBH            LINE#              200
+	C:07BDH            LINE#              201
+	C:07BFH            LINE#              202
+	C:07C1H            LINE#              203
+	C:07C8H            LINE#              206
+	C:07CFH            LINE#              207
+	C:07D1H            LINE#              208
+	C:07D3H            LINE#              209
+	C:07D5H            LINE#              210
+	C:07D7H            LINE#              211
+	C:07DEH            LINE#              220
+	C:07E0H            LINE#              221
+	C:07E2H            LINE#              222
+	C:07E4H            LINE#              223
+	C:07E6H            LINE#              224
+	C:07EDH            LINE#              226
+	C:07F4H            LINE#              228
+	C:07F6H            LINE#              229
+	C:07F8H            LINE#              230
+	C:07FAH            LINE#              231
+	C:07FCH            LINE#              232
+	C:0803H            LINE#              237
+	C:0805H            LINE#              238
+	C:0807H            LINE#              239
+	C:0809H            LINE#              240
+	C:080BH            LINE#              241
+	C:0812H            LINE#              243
+	C:0819H            LINE#              245
+	C:081BH            LINE#              246
+	C:081DH            LINE#              247
+	C:081FH            LINE#              248
+	C:0821H            LINE#              249
+	C:0828H            LINE#              254
+	C:082AH            LINE#              255
+	C:082CH            LINE#              256
+	C:082EH            LINE#              257
+	C:0830H            LINE#              258
+	C:0837H            LINE#              260
+	C:083EH            LINE#              262
+	C:0840H            LINE#              263
+	C:0842H            LINE#              264
+	C:0844H            LINE#              265
+	C:0846H            LINE#              266
+	C:084DH            LINE#              275
+	C:084FH            LINE#              276
+	C:0851H            LINE#              277
+	C:0853H            LINE#              278
+	C:0855H            LINE#              279
+	C:085CH            LINE#              281
+	C:0863H            LINE#              283
+	C:0865H            LINE#              284
+	C:0867H            LINE#              285
+	C:0869H            LINE#              286
+	C:086BH            LINE#              287
+	C:0872H            LINE#              292
+	C:0874H            LINE#              293
+	C:0876H            LINE#              294
+	C:0878H            LINE#              295
+	C:087AH            LINE#              296
+	C:0881H            LINE#              298
+	C:0888H            LINE#              300
+	C:088AH            LINE#              301
+	C:088CH            LINE#              302
+	C:088EH            LINE#              303
+	C:0890H            LINE#              304
+	C:0897H            LINE#              313
+	C:0899H            LINE#              314
+	C:089BH            LINE#              315
+	C:089DH            LINE#              316
+	C:089FH            LINE#              317
+	C:08A6H            LINE#              319
+	C:08ADH            LINE#              321
+	C:08AFH            LINE#              322
+	C:08B1H            LINE#              323
+	C:08B3H            LINE#              324
+	C:08B5H            LINE#              325
+	C:08BCH            LINE#              329
+	C:08BEH            LINE#              330
+	C:08C0H            LINE#              331
+	C:08C2H            LINE#              332
+	C:08C4H            LINE#              333
+	C:08CBH            LINE#              335
+	C:08D2H            LINE#              337
+	C:08D4H            LINE#              338
+	C:08D6H            LINE#              339
+	C:08D8H            LINE#              340
+	C:08DAH            LINE#              341
+	C:08E1H            LINE#              346
+	C:08E3H            LINE#              347
+	C:08E5H            LINE#              348
+	C:08E7H            LINE#              349
+	C:08E9H            LINE#              350
+	C:08F0H            LINE#              352
+	C:08F7H            LINE#              354
+	C:08F9H            LINE#              355
+	C:08FBH            LINE#              356
+	C:08FDH            LINE#              357
+	C:08FFH            LINE#              358
+	C:0906H            LINE#              363
+	C:0908H            LINE#              364
+	C:090AH            LINE#              365
+	C:090CH            LINE#              366
+	C:090EH            LINE#              367
+	C:0915H            LINE#              369
+	C:091CH            LINE#              371
+	C:091EH            LINE#              372
+	C:0920H            LINE#              373
+	C:0922H            LINE#              374
+	C:0924H            LINE#              375
+	C:092BH            LINE#              383
+	C:092DH            LINE#              384
+	C:092FH            LINE#              385
+	C:0931H            LINE#              386
+	C:0933H            LINE#              387
+	C:093AH            LINE#              389
+	C:0941H            LINE#              391
+	C:0943H            LINE#              392
+	C:0945H            LINE#              393
+	C:0947H            LINE#              394
+	C:0949H            LINE#              395
+	C:0950H            LINE#              402
+	C:0956H            LINE#              403
+	C:0969H            LINE#              404
+	C:0984H            LINE#              408
+	C:098DH            LINE#              409
+	C:09A5H            LINE#              410
+	C:09B1H            LINE#              411
+	C:09CBH            LINE#              413
+	C:09E6H            LINE#              419
+	-------            ENDPROC            main
+	-------            ENDMOD             maincode1
+	N:00E8H            PUBLIC             TIM1_INIT
+	N:0010H            PUBLIC             SIZEBUFPRINTF
+	N:0100H            PUBLIC             XSTACKLEN
+	N:0001H            PUBLIC             _EXTSTK_DUMMY_
+	C:0255H            PUBLIC             ?ADDIEEE
+	C:024CH            PUBLIC             ?SUBBIEEE
+	C:0252H            PUBLIC             ?ADDIEEEX
+	C:0249H            PUBLIC             ?SUBBIEEEX
+	C:03B1H            PUBLIC             __IEEE_TRAP_NAN__
+	C:03BCH            PUBLIC             __IEEE_END_RESULT__
+	C:03B5H            PUBLIC             __IEEE_RESULT_NULL__
+	C:03C2H            PUBLIC             _END_OP_IEEE?C
+	C:03A9H            PUBLIC             __IEEE_TRAP_DEB__
+	C:03D3H            PUBLIC             __IEEE_GET_EXP_SET_MANT__
+	C:03EDH            PUBLIC             ?CAST_IEEE
+	C:048FH            PUBLIC             ?CV_CHAR_IEEE
+	C:0433H            PUBLIC             ?CV_IEEE_LS
+	C:03F2H            PUBLIC             ?CV_LS_IEEE
+	C:0489H            PUBLIC             ?CV_IEEE_LU
+	C:042FH            PUBLIC             ?CV_LU_IEEE
+	C:04C0H            PUBLIC             ?COMPIEEE
+	C:0237H            PUBLIC             ?C_STARTES3
+	C:0003H            PUBLIC             MV4_XD2RG?C
+	C:000FH            PUBLIC             ?C_SIDIV
+	C:0037H            PUBLIC             ?C_UIDIV
+	C:00BCH            PUBLIC             CPL_R4R5
+	C:00C4H            PUBLIC             CPL_R6R7
+	C:006FH            PUBLIC             DIV_2
+	C:00D2H            PUBLIC             ?strcpy
+	C:00D4H            PUBLIC             __STRCPY_NXT1__
+	C:00CCH            PUBLIC             ?C_CPY
+	C:0232H            PUBLIC             __NULL_POINTER__
+	C:022FH            PUBLIC             __LOCAL_END__
+	X:0000H            PUBLIC             _XSTK0
+	D:0050H            PUBLIC             SPX
+	-------            MODULE             _C_STKX
+	X:0000H            PUBLIC             _XSTK0
+	D:0050H            PUBLIC             SPX
+	-------            ENDMOD             _C_STKX
+	D:00A0H            PUBLIC             HPD_ADDR
+	N:007FH            PUBLIC             IDATALEN
+	N:0000H            PUBLIC             _INITP2?
+
+LINK/LOCATE RUN COMPLETE,  NO ERROR FOUND.
+

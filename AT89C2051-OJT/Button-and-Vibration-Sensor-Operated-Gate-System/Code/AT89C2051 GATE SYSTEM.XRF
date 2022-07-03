@@ -1,0 +1,23 @@
+WIN32 LX51 CODE BANKING LINKER/LOCATOR V05.01.28
+
+
+INTER-MODULE CROSS-REFERENCE LISTING
+------------------------------------
+
+          NAME. . . . . . . . USAGE   MODULE NAMES
+          ----------------------------------------
+          ?C_STARTES3 . . . . CODE    [C3SES]:  AT89C2051 GATE SYSTEM
+          HPD_ADDR  . . . . . DATA    [HPD]:  C3SES
+          IDATALEN  . . . . . NUMBER  [_C_IDATALEN]:  C3SES
+          init  . . . . . . . CODE    [AT89C2051 GATE SYSTEM]: 
+          main  . . . . . . . CODE    [AT89C2051 GATE SYSTEM]:  C3SES
+          SIZEBUFPRINTF . . . NUMBER  [_WKRDTP_]: 
+          SPX . . . . . . . . DATA    [_C_STKX]:  C3SES
+          TIM1_INIT . . . . . NUMBER  [_WKRDTP_]: 
+          XSTACKLEN . . . . . NUMBER  [_WKRDTP_]: 
+          _delay  . . . . . . CODE    [AT89C2051 GATE SYSTEM]: 
+          _EXTSTK_DUMMY_  . . NUMBER  [_WKRDTP_]: 
+          _INITP2?  . . . . . NUMBER  [_C_IDATALEN]: 
+          _servo_angle  . . . CODE    [AT89C2051 GATE SYSTEM]: 
+          _STACK  . . . . . . IDATA   [AT89C2051 GATE SYSTEM]:  C3SES
+          _XSTK0  . . . . . . XDATA   [_C_STKX]:  C3SES
