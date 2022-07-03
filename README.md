@@ -18,8 +18,9 @@
 
 <h3>ESP8266 (NodeMCU)</h3>
 
-| Name | Go to |
-| ---- | ----- |
+| Name                                                      | Go to               |
+| --------------------------------------------------------- | ------------------- |
+| IoT-based Attendance System using RFID and SMS Capability | [Project](ESP8266/) |
 
 <h3>Raspberry Pi</h3>
 
