@@ -15,7 +15,7 @@
 
 ### Top View
 
-![project-topview](./Top-view.png)
+![project-topview](./Top-view.PNG)
 
 <p align="justify">
  The ultrasonic sensor is located in the left side of the image and an I2C LCD Display in the right side. 
@@ -23,7 +23,7 @@
 
 ### Top View
 
-![project-lcd](./Counter.png)
+![project-lcd](./Counter.PNG)
 
 <p align="justify">
  An I2C LCD used for displaying the current count of customers inside the establishment.
