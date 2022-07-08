@@ -25,7 +25,7 @@
 <h3>Raspberry Pi</h3>
 
 | Name | Go to |
-| IoT-based Attendance System using RFID and Face Recognition with SMS Capability - Thesis | [Project](Raspberry-Pi/) |
+| IoT-based Attendance System using RFID and Face Recognition with SMS | [Project](Raspberry-Pi/) |
 
 <h3>OJT</h3>
 
