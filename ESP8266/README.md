@@ -1,9 +1,21 @@
 <h1 align="center">IoT-based Attendance System using RFID with SMS Capability</h1>
 <p align="justify">
- A protoype of my Undergraduate Thesis where I used an ESP8266 NodeMCU rather than Raspberry Pi. The porject is connected in a Node.js-Express.js based REST API which consumes both GET and POST HTTP Methods. The third image below explains the algorithm on how the project works from the scanning of the RFID tag, to creating an Attendance of the RFID owner.
+ A protoype of my Undergraduate Thesis where I used an ESP8266 NodeMCU rather than Raspberry Pi. The project is connected in a Node.js-Express.js based REST API which consumes both GET and POST HTTP Methods. The third image below explains the algorithm on how the project works from the scanning of the RFID tag, to creating an Attendance of the RFID owner.
 </p>
 
 ## 🖼️ Preview
+
+### 🧠 What you'll learn
+
+<ul>
+   <li>You'll be able to interface the following: </li>
+    <ul>
+      <li>RC522 Reader with ESP8266 NodeMCU</li>
+      <li>SIM900A GSM Module with ESP8266 NodeMCU</li>
+      <li>1.3in OLED with ESP8266 NodeMCU</li>
+    </ul>
+    <li>Send HTTP Requests to any REST API (GET & POST HTTP Methods)</li>
+</ul>
 
 ### 🛠️ Project Components
 
