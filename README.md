@@ -25,7 +25,7 @@
 <h3>Raspberry Pi</h3>
 
 | Name | Go to |
-| ---- | ----- |
+| IoT-based Attendance System using RFID and Face Recognition with SMS Capability - Thesis | [Project](Raspberry-Pi/) |
 
 <h3>OJT</h3>
 
@@ -33,5 +33,3 @@
 | ------------------------------------------------ | -------------------------------------------------------------------------- |
 | Basketball Scoreboard                            | [Project](AT89C2051-OJT/Basketball-Scoreboard/)                            |
 | Button and Vibration Sensor Operated Gate System | [Project](AT89C2051-OJT/Button-and-Vibration-Sensor-Operated-Gate-System/) |
-
-<!-- Renamed Repo Test -->
